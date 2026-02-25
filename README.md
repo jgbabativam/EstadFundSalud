@@ -88,7 +88,7 @@ El curso se organiza en cinco unidades temáticas:
 
 | Introducción | — | — |
 
-| Probabilidad | — | \[Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/2.Probabilidad.html) |
+| Probabilidad | — | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/2.Probabilidad.html) |
 
 
 
