@@ -60,6 +60,5 @@ El curso incorpora el uso de tecnologías de la información y la comunicación 
 - 💻 Scripts y ejemplos reproducibles en R  
 - 📊 Bases de datos para prácticas y ejercicios  
 - 🧪 Talleres y actividades aplicadas 
-
-# \- 📑 Material de apoyo y referencias bibliográficas
+- 📑 Material de apoyo y referencias bibliográficas
 
