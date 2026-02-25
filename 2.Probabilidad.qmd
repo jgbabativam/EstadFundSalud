@@ -1,0 +1,306 @@
+---
+title: "Estadística Fundamental para Ciencias de la Salud"
+subtitle: "Fundamentos de probabilidad"
+author:
+    name: Giovany Babativa-Márquez, PhD
+    email: jgbabativam@unal.edu.co
+format: 
+  gbabativa-revealjs:
+    footer: "Diapositivas disponibles en [GitHub](https://github.com/jgbabativam)."
+    logo: "images/UNAL.png"
+incremental: false
+embed-resources: true
+highlight-style: dracula
+execute: 
+  echo: false
+  eval: true
+filters:
+  - webr
+revealjs-plugins:
+  - drop
+---
+
+```{r}
+library(pacman)
+
+p_load(here)
+```
+
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+## Proceso de analítica
+
+
+```{r, out.width= '100%'}
+knitr::include_graphics(here::here("images/Ciclo.png"))
+```
+[Wickham, H. y otros (2023)](https://r4ds.hadley.nz/)
+
+
+
+# TEORÍA BÁSICA DE PROBABILIDAD {background-color="#0077b6"}
+
+## Experimento aleatorio
+
+::: columns
+
+::: {.column width="70%"}
+
+
+Un proceso es un **experimento aleatorio** si:
+
+- Puede repetirse bajo las mismas condiciones.
+- Tiene varios resultados posibles.
+- No es posible predecir con certeza el resultado antes de realizarlo.
+- Permite identificar el conjunto de todos los resultados posibles (espacio muestral).
+
+*Ejemplo: lanzamiento de un dado*
+
+:::
+
+::: {.column width="30%"}
+
+![](images/dados.jpg)
+
+
+:::
+
+:::
+
+## Espacio Muestral
+
+### Definición
+
+</br>
+
+El **espacio muestral**, denotado por $\Omega$, es el conjunto de todos los resultados posibles de un experimento aleatorio. Los **elementos** son los posibles resultados $\omega$, de tal forma que:
+
+$$
+\Omega = \{\omega : \omega \text{ es un resultado posible del experimento}\}
+$$
+
+## Espacio Muestral
+
+### Clasificación según el tipo de resultados
+
+**1️⃣ Espacios muestrales discretos**
+
+Conjunto de resultados finito o infinito numerable.
+
+$$
+\Omega = \{\omega_1, \omega_2, \omega_3, \dots \}
+$$
+
+**2️⃣ Espacios muestrales continuos**
+
+Conjunto de resultados infinito no numerable, generalmente asociado a intervalos de números reales.
+
+$$
+\Omega \subseteq \mathbb{R}
+$$
+
+---
+
+## Ejemplos
+
+### 🎲 Experimento 1: Lanzar un dado
+
+::: columns
+
+::: {.column width="70%"}
+
+</br></br>
+
+$$
+\Omega_1 = \{1,2,3,4,5,6\}
+$$
+
+Tipo: **Finito (discreto)**
+
+:::
+
+::: {.column width="30%"}
+
+![](images/dados.jpg)
+
+
+:::
+
+:::
+
+
+## Ejemplos
+
+### 🚗 Experimento 2: Conteo de accidentes en carreteras en un periodo
+
+$$
+\Omega_2 = \{0,1,2,3,\dots\}
+$$
+
+Tipo: **Infinito numerable (discreto)**
+
+
+::: {.fragment}
+</br>
+
+### 📏 Experimento 3: Medición de estaturas de personas
+
+$$
+\Omega_3 = \{x \in \mathbb{R} : x > 0\}
+$$
+
+Tipo: **Infinito no numerable (continuo)**
+
+:::
+
+## σ-álgebra y eventos
+
+### Definición
+
+<div style="text-align: justify;">
+
+Sea $\Omega$ el espacio muestral de un experimento aleatorio. Una **σ-álgebra** (sigma-álgebra) sobre $\Omega$, denotada por $\mathcal{F}$, es una colección de subconjuntos de $\Omega$ que satisface:
+
+1. $\Omega \in \mathcal{F}$
+2. Si $A \in \mathcal{F}$, entonces su complemento $A^c \in \mathcal{F}$
+3. Si $A_1, A_2, A_3, \dots \in \mathcal{F}$, entonces $\bigcup_{i=1}^{\infty} A_i \in \mathcal{F}$
+
+Como consecuencia, también se cumple que:
+
+$\bigcap_{i=1}^{\infty} A_i \in \mathcal{F}$
+
+</div>
+
+---
+
+### Eventos
+
+Los elementos de la σ-álgebra $\mathcal{F}$ se denominan **eventos**.
+
+Así, un evento es un subconjunto del espacio muestral:
+
+$$A \subseteq \Omega, \quad A \in \mathcal{F}$$
+
+::: {.fragment}
+
+### Ejemplo: Lanzamiento de un dado
+
+$$\Omega = \{1,2,3,4,5,6\}$$
+
+Evento: "obtener un número par" entonces $A = \{2,4,6\}$
+
+Aquí, $A \in \mathcal{F}$ es un **evento**.
+
+:::
+
+## Probabilidad como frecuencia relativa
+
+La **probabilidad** de un evento puede interpretarse como la frecuencia relativa de ocurrencia en un gran número de repeticiones del experimento.
+
+Si un experimento se repite $n$ veces y el evento $A$ ocurre $n_A$ veces, entonces:
+
+$$fr(A) = \frac{n_A}{n}$$
+
+. . . 
+
+En el caso clásico con resultados equiprobables, se define:
+
+$$P(A) = \frac{\text{número de casos favorables}}{\text{número de casos posibles}}$$
+
+
+---
+
+### Espacio de Probabilidad
+
+Un **espacio de probabilidad** es la tripleta: $(\Omega, \mathcal{F}, P)$
+
+donde:
+
+- $\Omega$: espacio muestral  
+- $\mathcal{F}$: σ-álgebra de eventos  
+- $P$: medida de probabilidad  
+
+---
+
+### Axiomas de la medida de probabilidad
+
+La función $P : \mathcal{F} \to [0,1]$ satisface:
+
+* $P(A) \ge 0 \quad \forall A \in \mathcal{F}$
+* $P(\Omega) = 1$
+* Si $A_1, A_2, A_3, \dots \in  \mathcal{F}$ son eventos mutuamente excluyentes:
+
+$$P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i)$$
+Por tanto,
+
+$$0 \le P(A) \le 1$$
+
+
+## Propiedades de un espacio de probabilidad
+
+Sea $(\Omega, \mathcal{F}, P)$ un espacio de probabilidad y $A, B \in \mathcal{F}$.
+
+
+* $P(\varnothing) = 0$
+* $P(A^c) = 1 - P(A)$
+* Si $A \subseteq B$, entonces: $P(A) \le P(B)$
+* $P(A \cup B) = P(A) + P(B) - P(A \cap B)$
+
+. . . 
+
+Si $A \cap B = \varnothing$ (mutuamente excluyentes):
+
+$$P(A \cup B) = P(A) + P(B)$$
+
+
+---
+
+## Ejemplos
+
+### 🧪 Ejemplo 1: Resultado de una prueba diagnóstica
+
+Sea:
+
+- $A$: paciente tiene la enfermedad  
+- $B$: prueba positiva  
+
+Probabilidad de interés: $P(B)$
+
+Proporción de pacientes con resultado positivo.
+
+---
+
+### 💊 Ejemplo 2: Respuesta a tratamiento
+
+Si en un ensayo clínico:
+
+- 80 de 100 pacientes mejoran
+
+$$P(\text{mejoría}) = \frac{80}{100} = 0.8$$
+
+---
+
+### ❤️ Ejemplo 3: Factores de riesgo
+
+Sea:
+
+- $A$: paciente fuma  
+- $B$: paciente tiene enfermedad cardiovascular  
+
+Probabilidad conjunta: $P(A \cap B)$
+
+</br>
+
+Pacientes que **fuman y tienen enfermedad**.
+
+---
+
+### 🏥 Ejemplo 4: Regla del complemento
+
+</br>
+
+Si la probabilidad de complicación quirúrgica es: $P(C) = 0.1$
+
+</br></br>
+
+Entonces la probabilidad de que **no se tengan complicaciones** es: $$P(C^c) = 1 - P(C) = 0.9$$
