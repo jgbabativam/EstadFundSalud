@@ -85,8 +85,8 @@ El curso se organiza en cinco unidades temáticas:
 | Tema | Materiales de apoyo | Material de clase |
 
 |------|---------------------|-------------------|
-
-| Introducción | materiales | — |
+| Bienvenida | - | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/0.Bienvenida.html)
+| Introducción | materiales | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/1.Intro.html) |
 
 | Probabilidad | materiales | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/2.Probabilidad.html) |
 
