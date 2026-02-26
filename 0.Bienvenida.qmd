@@ -1,0 +1,122 @@
+---
+title: "Estadística Fundamental para Ciencias de la Salud"
+subtitle: "Introducción"
+author:
+    name: Giovany Babativa-Márquez, PhD
+    email: jgbabativam@unal.edu.co
+format: 
+  gbabativa-revealjs:
+    footer: "Diapositivas disponibles en [GitHub](https://github.com/jgbabativam)."
+    logo: "images/UNAL.png"
+incremental: false
+embed-resources: true
+highlight-style: dracula
+execute: 
+  echo: false
+  eval: true
+filters:
+  - webr
+revealjs-plugins:
+  - drop
+---
+
+```{r}
+library(pacman)
+
+p_load(here)
+```
+
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+## Sobre Mi
+
+<div style="text-align: justify;">
+
+PhD en Estadística, MSc en Analytics & Big Data, MSc en Estadística. Con más de 20 años de experiencia. He sido director de analítica en varias empresas, investigador en observatorios de salud, miembro del comité de expertos en pobreza en el DANE y consultor de la División de Estadística de la CEPAL. Ex-decano de la Facultad de Estadística USTA, ex-director de operaciones en el ICFES, PM CEV ...
+
+> Puedes encontrarme en:
+
+- {{< ai google-scholar >}} [Google scholar](https://scholar.google.es/citations?user=2NJRNg8AAAAJ&hl=es)
+- {{< fa brands github >}} [GitHub. https://github.com/jgbabativam](https://github.com/jgbabativam)
+- {{< fa brands linkedin >}} [linkedin](https://www.linkedin.com/in/giovany-babativa-marquez/?originalSubdomain=co)
+- {{< fa solid envelope >}} jgbabativam@unal.edu.co
+
+</div>
+
+## 📖 Enfoque
+
+- La práctica de los profesionales en ciencias de la salud implica la toma de decisiones en múltiples contextos: desde la aplicación de protocolos estandarizados hasta la interpretación crítica de evidencia científica proveniente de estudios epidemiológicos, encuestas poblacionales y artículos académicos.
+
+- Este curso tiene como propósito formar lectores críticos y usuarios competentes de la investigación científica en salud humana, proporcionando bases estadísticas sólidas que permitan también participar activamente como coinvestigadores en proyectos de investigación.
+
+- Se usa el programa **R** para el desarrollo de prácticas usando datos.
+
+## 🎯 Objetivos
+
+* Comprender los fundamentos de la estadística aplicada a las ciencias de la salud.
+* Interpretar resultados de investigaciones científicas y estudios epidemiológicos.
+* Desarrollar habilidades para el análisis de datos usando herramientas computacionales.
+* Aplicar métodos estadísticos en la toma de decisiones en contextos de salud.
+
+## 🧠 Contenidos
+
+</br></br>
+
+1. Introducción
+2. Fundamentos de probabilidad
+3. Distribuciones de probabilidad
+4. Medidas descriptivas
+5. Inferencia: estimación puntual y por intervalo
+6. Inferencia: pruebas de hipótesis
+
+## 📝 Evaluación
+
+::: columns
+
+::: {.column width="60%"}
+
+</br></br>
+
+- 5 exámenes, cada uno con un valor del **20%**. 
+- Los exámenes cubren únicamente el tema correspondiente (no son acumulativos).
+
+
+:::
+
+::: {.column width="40%"}
+
+</br></br>
+![](images/test.jpg)
+
+
+:::
+
+:::
+
+---
+
+
+**Opción para el último examen**:
+
+En la sesión previa al quinto examen, cada estudiante podrá elegir entre:
+
+1. **Presentar el examen del último tema**, o
+2. **Presentar un examen final acumulativo** que cubre todos los temas del curso.
+
+Si se elige el **examen final acumulativo**:
+
+* Su nota contará como la **quinta calificación (20%)**, y
+* **Reemplazará automáticamente la nota más baja** obtenida en los cuatro exámenes anteriores.
+
+
+## 📚 Bibliografía
+
+Estas son algunas referencias:
+
+* López Kleine, L. (2012). Bioestadística. Universidad Nacional de Colombia. 
+
+* Moncho Vasallo, J. (2021). Estadística aplicada a las ciencias de la salud. Elsevier. Segunda edición.
+
+* Torres Huertas, J. (2019). Estadística aplicada a las ciencias de la salud. Dextra Editorial.
+
+* Walpole, R. E., Myers, R. H., Myers, S. L., & Ye, K. (2012). Probabilidad y estadística para ingeniería y ciencias (9.ª ed.). Pearson Educación.

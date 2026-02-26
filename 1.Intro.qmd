@@ -1,0 +1,66 @@
+---
+title: "Estadística Fundamental para Ciencias de la Salud"
+subtitle: "Introducción"
+author:
+    name: Giovany Babativa-Márquez, PhD
+    email: jgbabativam@unal.edu.co
+format: 
+  gbabativa-revealjs:
+    footer: "Diapositivas disponibles en [GitHub](https://github.com/jgbabativam)."
+    logo: "images/UNAL.png"
+incremental: false
+embed-resources: true
+highlight-style: dracula
+execute: 
+  echo: false
+  eval: true
+filters:
+  - webr
+revealjs-plugins:
+  - drop
+---
+
+```{r}
+library(pacman)
+
+p_load(here)
+```
+
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+## Tipos de variables
+
+![](images/tipovars.png){fig-align="center" width="100%"}
+
+## Tipos de variables
+
+![](images/tipovars2.png){fig-align="center" width="100%"}
+
+<span style="font-size:0.7em; color:gray">Fuente: Allison Horst</span>
+
+## Tipos de variables
+
+![](images/escalas.png){fig-align="center" width="100%"}
+
+<span style="font-size:0.7em; color:gray">Fuente: Allison Horst</span>
+
+
+## 🩺 Actividad: Identificación de variables 
+
+</br></br>
+
+🎯 Objetivo: 
+
+- Identificar el **tipo de variable** (cualitativa / cuantitativa)
+- Determinar su **subtipo** (nominal, ordinal, discreta, continua)
+- Reconocer la **escala de medición** (nominal, ordinal, intervalo, razón)
+
+## ❤️ Ejercicio 1 — Signos vitales 
+
+Clasifique las siguientes variables: 
+
+1. Frecuencia cardíaca (latidos por minuto) 
+2. Temperatura corporal (°C) 
+3. Saturación de oxígeno (%) 
+4. Presión arterial sistólica (mmHg) 
+5. Dolor según escala EVA (0–10)
