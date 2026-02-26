@@ -38,7 +38,7 @@ PhD en Estadística, MSc en Analytics & Big Data, MSc en Estadística. Con más 
 
 - {{< ai google-scholar >}} [Google scholar](https://scholar.google.es/citations?user=2NJRNg8AAAAJ&hl=es)
 - {{< fa brands github >}} [GitHub. https://github.com/jgbabativam](https://github.com/jgbabativam)
-- {{< fa brands linkedin >}} [linkedin](https://www.linkedin.com/in/giovany-babativa-marquez/?originalSubdomain=co)
+- {{< fa brands linkedin >}} [linkedIn](https://www.linkedin.com/in/giovany-babativa-marquez/?originalSubdomain=co)
 - {{< fa solid envelope >}} jgbabativam@unal.edu.co
 
 </div>

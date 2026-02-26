@@ -64,3 +64,39 @@ Clasifique las siguientes variables:
 3. Saturación de oxígeno (%) 
 4. Presión arterial sistólica (mmHg) 
 5. Dolor según escala EVA (0–10)
+
+
+---
+
+## 🏥 Ejercicio 2
+
+Identifique tipo y escala: 
+
+1. Tipo de vía venosa (periférica, central, ninguna) 
+2. Nivel de dependencia (independiente, parcial, total) 
+3. Número de medicamentos administrados en un turno 
+4. Tiempo de hospitalización (días) 
+5. Presencia de úlcera por presión (sí/no)
+
+## 🦵 Ejercicio 3 
+
+Clasifique: 
+
+1. Rango de movimiento de rodilla (grados) 
+2. Fuerza muscular (escala Daniels 0–5) 
+3. Nivel de dolor (leve, moderado, severo)
+4. Edad en años
+5. Índice de masa corporal
+6. Grupo sanguineo  
+
+
+## 🎮 ¡Momento de jugar! 
+
+</br></br>
+
+### 📱 Conéctate a Kahoot 
+
+1. Ingresa a 👉 **www.kahoot.it** 
+2. Introduce el **PIN del juego** 
+3. Escribe tu nombre 
+4. ¡Prepárate!
