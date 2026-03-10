@@ -193,6 +193,7 @@ Aquí, $A \in \mathcal{F}$ es un **evento**.
 
 :::
 
+
 ## Probabilidad como frecuencia relativa
 
 La **probabilidad** de un evento puede interpretarse como la frecuencia relativa de ocurrencia en un gran número de repeticiones del experimento.
@@ -208,9 +209,133 @@ En el caso clásico con resultados equiprobables, se define:
 $$P(A) = \frac{\text{número de casos favorables}}{\text{número de casos posibles}}$$
 
 
+## Conceptos Básicos de Conjuntos
+
+### 1. Conjunto Complemento ($A^c$ o $A'$)
+
+::: {.columns}
+::: {.column width="60%"}
+El complemento contiene todos los resultados en el espacio muestral $\Omega$ que **no** están en el evento $A$.
+
+$$P(A^c) = 1 - P(A)$$
+
+:::
+
+::: {.column width="40%"}
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+#| out-width: "100%"
+knitr::include_graphics("images/conjuntos.png")
+```
+:::
+  
+:::
+
+*Ejemplo:* Si $A$ es el evento "el paciente presenta hipertensión", $A^c$ es el evento "el paciente **no** presenta hipertensión".
+
 ---
 
-### Espacio de Probabilidad
+### 2. Intersección de Eventos ($A \cap B$)
+
+::: {.columns}
+::: {.column width="60%"}
+
+La intersección representa la ocurrencia simultánea de dos eventos, $A$ y $B$. Matemáticamente, $A \cap B$.
+
+$$P(A \text{ y } B) = P(A \cap B)$$
+:::
+::: {.column width="40%"}
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+#| out-width: "100%"
+knitr::include_graphics("images/conjuntos.png")
+```
+
+:::
+:::
+
+*Ejemplo:* Si $A$ es "paciente con diabetes" y $B$ es "paciente con obesidad", $A \cap B$ son los pacientes que padecen ambas condiciones.
+
+--- 
+
+### 3. Eventos Mutuamente Excluyentes
+
+::: {.columns}
+::: {.column width="60%"}
+Dos eventos son mutuamente excluyentes (o disjuntos) si no pueden ocurrir al mismo tiempo. Su intersección es vacía ($A \cap B = \emptyset$).
+
+$$ P(A \cap B) = 0$$
+
+:::
+::: {.column width="40%"}
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+#| out-width: "100%"
+knitr::include_graphics("images/conjuntos.png")
+```
+
+:::
+:::
+
+*Ejemplo:* Un test diagnóstico rápido cuyo resultado es "Positivo" o "Negativo". No puede ser ambos simultáneamente.
+
+---
+
+### 4. Unión de Eventos (A∪B)
+
+::: {.columns}
+::: {.column width="60%"}
+La unión contiene todos los resultados que están en A, o en B, o en ambos. Se denota como $A \cup B$.
+
+</br></br>
+
+$$P(A \cup B)=P(A)+P(B)−P(A \cap B)$$
+:::
+::: {.column width="40%"}
+
+```{r}
+#| echo: false
+#| fig-align: "center"
+#| out-width: "100%"
+knitr::include_graphics("images/conjuntos.png")
+
+```
+
+:::
+:::
+
+*Ejemplo:* Pacientes que requieren derivación a "Servicio de Fisioterapia" (A) O a "Servicio de Traumatología" (B).
+
+
+---
+
+### Ejemplo
+
+Se están analizando a 36 pacientes que ingresaron este mes a la unidad de cuidados intensivos, los cuales pueden presentar tres condiciones de salud, estos son pacientes con:
+
+* Evento A: Artrosis severa (limitación mecánica).
+* Evento B: Hipertensión arterial (riesgo cardiovascular).
+* Evento C: Deterioro cognitivo leve (riesgo de caídas/desorientación).
+
+---
+
+Los pacientes se han clasificado de acuerdo con las condiciones que presentan:
+
+::: {.center}
+![](images/ejerConj.png){width=75%}
+:::
+
+Encuentre: $A \cap B$, $B \cap C$, $A \cup C$, $B^c \cap A$, $A \cap B \cap C$, $B^c \cap A$, $(A \cup B) \cap C^c$
+
+---
+
+## Espacio de Probabilidad
 
 Un **espacio de probabilidad** es la tripleta: $(\Omega, \mathcal{F}, P)$
 
@@ -220,7 +345,7 @@ donde:
 - $\mathcal{F}$: σ-álgebra de eventos  
 - $P$: medida de probabilidad  
 
----
+--- 
 
 ### Axiomas de la medida de probabilidad
 
@@ -304,3 +429,155 @@ Si la probabilidad de complicación quirúrgica es: $P(C) = 0.1$
 </br></br>
 
 Entonces la probabilidad de que **no se tengan complicaciones** es: $$P(C^c) = 1 - P(C) = 0.9$$
+
+# REGLAS DE CONTEO {background-color="#0077b6"}
+
+## Teorema fundamental del conteo
+
+Si un experimento se puede realizar en $k$ etapas, y cada una se puede hacer de $n_i$ formas diferentes, enonces el experimento completo se puede realizar de 
+
+$$n_1 \times n_2 \times \cdots \times n_k$$
+
+formas distintas. Esto se conoce como **regla de la multiplicación**.
+
+---
+
+### Ejemplo
+
+Un fisioterapeuta puede elegir:
+
+- 3 tipos de **terapia**
+- 2 tipos de **vendaje**
+- 4 ejercicios de **rehabilitación**
+
+¿Cuántos planes de tratamiento diferentes puede diseñar?
+
+::: {.fragment}
+
+$$ 3 \times 2 \times 4 = 24 $$
+
+Hay **24 posibles combinaciones de tratamiento**.
+
+:::
+
+---
+
+### Regla de la multiplicación
+
+Se usa cuando:
+
+- un proceso ocurre **paso a paso**
+- en cada paso hay **varias opciones**
+- queremos contar **todas las combinaciones posibles**
+
+
+Ejemplo: Debe asignar
+
+- 5 enfermeros a turno mañana
+- 4 enfermeros a turno tarde
+
+¿De formas de elegir los enfermeros para coordinar ambos turnos?
+
+::: {.fragment}
+$5 \times 4 = 20$
+:::
+
+---
+
+## Permutaciones
+
+Se usan cuando **el orden importa**
+
+Ejemplos donde el orden importa:
+
+- orden de atención de pacientes
+- orden de llegada en una carrera
+- orden de presentación de casos clínicos
+
+---
+
+### Fórmula de permutaciones
+
+Número de formas de ordenar **n objetos**:
+
+$$n!$$
+
+donde
+
+$$n! = n \times (n-1) \times (n-2) \times \cdots \times 1$$
+Ejemplo: En una clínica hay **4 pacientes** esperando fisioterapia. ¿De cuántas formas distintas pueden ser atendidos?
+
+::: {.fragment}
+
+$$4! = 4 \times 3 \times 2 \times 1 = 24$$
+
+Hay **24 formas diferentes de realizar la atención**.
+
+:::
+
+---
+
+### Combinatorias
+
+Se usan cuando **el orden NO importa**
+
+Ejemplos:
+
+- elegir pacientes para un estudio clínico
+- seleccionar medicamentos para un protocolo
+- elegir miembros de un equipo médico
+
+::: {.fragment}
+El número de formas de elegir **k elementos de n**:
+
+$${n \choose k} = \frac{n!}{k!(n-k)!}$$
+
+:::
+
+---
+
+### Ejemplo
+
+De **8 enfermeros** se deben seleccionar **3** para un comité de calidad. ¿Cuántos comités diferentes son posibles?
+
+</br></br>
+
+::: {.fragment}
+
+$${8 \choose 3} = \frac{8!}{3!5!} = 56$$
+
+Hay **56 posibles grupos**.
+
+:::
+
+## ¿Cómo saber cuál usar?
+
+| Situación | Método |
+|-----------|--------|
+| Proceso en varias etapas | Regla de multiplicación |
+| Importa el orden | Permutaciones |
+| No importa el orden | Combinatorias |
+
+Ejemplos:
+
+- Orden de atención → **Permutación**
+- Selección de pacientes → **Combinatoria**
+- Elección de terapia + ejercicio → **Multiplicación**
+
+---
+
+### Ejercicios
+
+1. Un plan de rehabilitación incluye: 4 tipos de terapia, 3 ejercicios y 2 tipos de vendaje. ¿Cuántos planes diferentes pueden diseñarse?
+
+
+2. En una sala hay **5 pacientes** esperando atención. ¿De cuántas formas distintas pueden ser atendidos?
+
+
+3. De **10 enfermeros**, se deben elegir **4** para un equipo de investigación. ¿Cuántos equipos diferentes pueden formarse?
+
+4. En fisioterapia hay **6 ejercicios** disponibles. ¿De cuántas maneras se pueden elegir **2 ejercicios** para una sesión?
+
+5. Tres pacientes deben realizar pruebas en **3 equipos diferentes**. ¿De cuántas maneras pueden asignarse?
+
+# PROBABILIDAD CONDICIONAL {background-color="#0077b6"}
