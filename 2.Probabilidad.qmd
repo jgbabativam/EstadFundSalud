@@ -581,3 +581,843 @@ Ejemplos:
 5. Tres pacientes deben realizar pruebas en **3 equipos diferentes**. ¿De cuántas maneras pueden asignarse?
 
 # PROBABILIDAD CONDICIONAL {background-color="#0077b6"}
+
+```{r}
+#| echo: false
+p_load(ggplot2, dplyr)
+```
+
+## El problema de Monty Hall
+
+Imagina que participas en un concurso de televisión. Se te presentan **tres puertas**:
+
+::: columns
+
+::: {.column width="58%"}
+
+- Detrás de **una puerta** hay un **automóvil** 🚗
+- Detrás de las **otras dos** hay una **cabra** 🐐
+
+:::
+
+::: {.column width="42%"}
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 3.5
+
+door_df <- data.frame(
+  x     = c(1, 2, 3),
+  label = c("Puerta 1\n(Tu eleccion)", "Puerta 2\n(?)", "Puerta 3\n(Cabra!)"),
+  fc    = c("#1565C0", "#2E7D32", "#757575")
+)
+
+ggplot(door_df) +
+  geom_rect(aes(xmin = x - 0.38, xmax = x + 0.38,
+                ymin = 0.05, ymax = 0.95, fill = fc),
+            color = "#222222", linewidth = 1.8) +
+  geom_text(aes(x = x, y = 0.50, label = label),
+            color = "white", fontface = "bold", size = 3.5) +
+  geom_point(aes(x = x, y = 0.12), size = 4, color = "#FFC107") +
+  scale_fill_identity() +
+  theme_void() +
+  xlim(0.45, 3.55) + ylim(0, 1.15) +
+  theme(plot.title    = element_text(hjust = 0.5, size = 11, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, size = 9,  color = "gray50"))
+```
+
+:::
+
+:::
+
+Eliges la **Puerta 1**. El presentador, que **sabe dónde está el auto**, abre otra puerta y muestra una **cabra**.
+
+**¿Cambiarías a la otra puerta que quedó cerrada?**
+
+## Escenarios posibles
+
+> Supongamos que **siempre eliges la Puerta 1** y el presentador **siempre abre una puerta con cabra**
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 4.0
+#| fig-width: 11
+
+casos <- data.frame(
+  caso_num   = rep(1:3, each = 3),
+  caso_label = rep(c(
+    "Caso 1 (prob=1/3): Auto en P1\nEl presentador abre P2 o P3\n=> CAMBIAR: PIERDE",
+    "Caso 2 (prob=1/3): Auto en P2\nEl presentador DEBE abrir P3\n=> CAMBIAR: GANA",
+    "Caso 3 (prob=1/3): Auto en P3\nEl presentador DEBE abrir P2\n=> CAMBIAR: GANA"
+  ), each = 3),
+  puerta    = rep(1:3, 3),
+  contenido = c("AUTO","CABRA","CABRA",
+                "CABRA","AUTO","CABRA",
+                "CABRA","CABRA","AUTO"),
+  estado    = c("elegida","disponible","abierta",
+                "elegida","disponible","abierta",
+                "elegida","abierta","disponible")
+)
+casos$caso_label <- factor(casos$caso_label, levels = unique(casos$caso_label))
+
+colores  <- c("elegida"    = "#1565C0",
+              "abierta"    = "#B0BEC5",
+              "disponible" = "#2E7D32")
+etiquetas <- c("elegida"    = "Tu eleccion (P1)",
+               "abierta"    = "Abierta (cabra)",
+               "disponible" = "Disponible para cambiar")
+
+ggplot(casos, aes(x = factor(puerta), y = 0.5)) +
+  geom_tile(aes(fill = estado), width = 0.78, height = 0.72,
+            color = "black", linewidth = 1.1) +
+  geom_text(aes(label = paste0("Puerta ", puerta, "\n(", contenido, ")")),
+            size = 3.3, fontface = "bold", color = "white") +
+  facet_wrap(~caso_label, ncol = 3) +
+  scale_fill_manual(values = colores, labels = etiquetas, name = "") +
+  theme_minimal() +
+  theme(axis.text       = element_blank(),
+        axis.title      = element_blank(),
+        axis.ticks      = element_blank(),
+        panel.grid      = element_blank(),
+        strip.text      = element_text(size = 9, face = "bold"),
+        legend.position = "bottom",
+        legend.text     = element_text(size = 9))
+```
+
+## Cambiar duplica la probabilidad de ganar
+
+$$P(\text{ganar} \mid \text{cambia de puerta}) = \frac{2}{3} \approx \mathbf{66.6\%}$$
+
+$$P(\text{ganar} \mid \text{no cambiar de puerta}) = \frac{1}{3} \approx \mathbf{33.3\%}$$
+
+> 💡 El presentador **no actúa aleatoriamente**: siempre muestra una cabra. Esto *transfiere probabilidad* a la otra puerta y es la esencia de la probabilidad condicional.
+
+## Definición: Probabilidad condicional
+
+Sea $(\Omega, \mathcal{F}, P)$ un espacio de probabilidad y $A, B \in \mathcal{F}$ con $P(B) > 0$.
+
+</br>
+
+La **probabilidad condicional** de $A$ dado $B$ se define como:
+
+$$\boxed{P(A \mid B) = \frac{P(A \cap B)}{P(B)}}$$
+
+::: {.fragment}
+
+**Interpretación:** Se *restringe* el universo al evento $B$ y se mide qué fracción de $B$ corresponde a $A$.
+
+:::
+
+---
+
+::: {.fragment}
+
+**Ejemplo intuitivo:** Si en una sala hay 100 pacientes, 40 son hipertensos ($B$) y de ellos 12 también son diabéticos ($A \cap B$), entonces:
+
+</br>
+
+$$P(\text{Diabético} \mid \text{Hipertenso}) = \frac{12}{40} = 0.30$$
+
+:::
+
+## Visualización: Probabilidad condicional
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 4.2
+#| fig-width: 8
+
+theta <- seq(0, 2 * pi, length.out = 300)
+cirA  <- data.frame(x = -0.6 + 1.65 * cos(theta), y = 0.25 + 1.55 * sin(theta))
+cirB  <- data.frame(x =  0.75 + 2.05 * cos(theta), y = 0.0  + 1.85 * sin(theta))
+omega <- data.frame(x = c(-3.8, 3.8, 3.8, -3.8), y = c(-2.6, -2.6, 2.6, 2.6))
+
+ggplot() +
+  geom_polygon(data = omega, aes(x, y),
+               fill = "#F5F5F5", color = "black", linewidth = 1.4) +
+  geom_polygon(data = cirB, aes(x, y),
+               fill = "#BBDEFB", color = "#1565C0", linewidth = 1.3, alpha = 0.75) +
+  geom_polygon(data = cirA, aes(x, y),
+               fill = "#FFCCBC", color = "#BF360C", linewidth = 1.3, alpha = 0.55) +
+  annotate("text", x = -2.1, y = 0.3, label = "A",
+           size = 9, fontface = "bold", color = "#BF360C") +
+  annotate("text", x = 2.3, y = 0.0, label = "B",
+           size = 9, fontface = "bold", color = "#1565C0") +
+  annotate("text", x = 0.15, y = 0.15, label = "A \u2229 B",
+           size = 5.5, fontface = "bold", color = "#4A148C") +
+  annotate("text", x = -3.3, y = 2.2, label = "\u03a9",
+           size = 9, fontface = "bold", color = "black") +
+  annotate("text", x = 0.0, y = -2.3,
+           label = "Al condicionar en B, B se convierte en el nuevo espacio muestral",
+           size = 3.8, color = "#333333", fontface = "italic") +
+  theme_void() + coord_fixed()
+```
+
+## Corolario: Regla del producto
+
+De la definición de probabilidad condicional se obtiene directamente la **regla del producto**:
+
+$$P(A \cap B) = P(A \mid B) \cdot P(B)$$
+
+::: {.fragment}
+
+</br>
+
+Y de manera análoga, como $P(B \mid A) = \dfrac{P(A \cap B)}{P(A)}$, también se tiene:
+
+$$P(A \cap B) = P(B \mid A) \cdot P(A)$$
+
+:::
+
+---
+
+::: {.fragment}
+
+</br>
+
+> **Corolario**
+>
+> $$\boxed{P(A \cap B) = P(A \mid B) \cdot P(B) = P(B \mid A) \cdot P(A)}$$
+
+</br>
+
+Esta regla es muy útil para calcular probabilidades conjuntas cuando se conocen probabilidades condicionales.
+
+:::
+
+## Eventos independientes
+
+### Definición
+
+Dos eventos $A$ y $B$ se denominan **independientes** si el hecho de que $B$ ocurra **no modifica** la probabilidad de $A$:
+
+$$P(A \mid B) = P(A)$$
+
+::: {.fragment}
+
+### Criterio práctico equivalente
+
+Sustituyendo en la regla del producto:
+
+$$\boxed{P(A \cap B) = P(A) \cdot P(B)}$$
+
+:::
+
+---
+
+::: {.fragment}
+
+### Ejemplo
+
+El grupo sanguíneo de un paciente y su preferencia por un tipo de analgésico son eventos **independientes** si conocer el grupo sanguíneo no cambia la probabilidad de preferir ese analgésico.
+
+</br>
+
+En cambio, fumar e hipertensión **NO son independientes**: los fumadores tienen mayor riesgo.
+
+:::
+
+## Ejemplo 1: Sensibilidad y Especificidad
+
+En un programa de tamizaje se aplica una **prueba diagnóstica** para detectar *diabetes tipo 2*:
+
+::: columns
+
+::: {.column width="55%"}
+
+- $D$: el paciente **tiene** diabetes
+- $+$: resultado **positivo** de la prueba
+
+
+| Parámetro | Definición | Valor |
+|-----------|-----------|:-----:|
+| Prevalencia | $P(D)$ | 0.10 |
+| *Sensibilidad* | $P(+\mid D)$ | 0.92 |
+| *Especificidad* | $P(-\mid D^c)$ | 0.88 |
+
+:::
+
+::: {.column width="45%"}
+
+::: {.fragment}
+
+**Tasa de falsos negativos:**
+$$P(-\mid D) = 1 - 0.92 = 0.08$$
+
+**Tasa de falsos positivos:**
+$$P(+\mid D^c) = 1 - 0.88 = 0.12$$
+
+:::
+
+:::
+
+:::
+
+---
+
+### Interpretación de los resultados
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 3.5
+#| fig-width: 9
+
+mat <- data.frame(
+  resultado  = factor(c("Positivo","Negativo","Positivo","Negativo"),
+                      levels = c("Positivo","Negativo")),
+  enfermedad = c("Con Diabetes","Con Diabetes","Sin Diabetes","Sin Diabetes"),
+  prob       = c(0.092, 0.008, 0.108, 0.792),
+  color      = c("#C62828","#EF9A9A","#42A5F5","#BBDEFB")
+)
+
+ggplot(mat, aes(x = resultado, y = enfermedad)) +
+  geom_tile(aes(fill = color), color = "white", linewidth = 2) +
+  geom_text(aes(label = paste0("P = ", prob)),
+            size = 6, fontface = "bold", color = "white") +
+  scale_fill_identity() +
+  theme_minimal(base_size = 13) +
+  labs(x = "Resultado de la prueba", y = "",
+       title = "Probabilidades conjuntas P(Enfermedad \u2229 Resultado)") +
+  theme(plot.title       = element_text(hjust = 0.5, face = "bold"),
+        panel.grid       = element_blank(),
+        axis.text        = element_text(size = 12, face = "bold"))
+```
+
+Recuerda que: $$P(A \cap B) = P(A|B) \cdot P(B) = P(B|A)  \cdot P(A)$$
+
+## Ejemplo 2: Factores de riesgo cardiovascular
+
+En un estudio sobre **enfermedad cardiovascular (ECV)** en adultos:
+
+
+- $F$: paciente es **fumador** → $P(F) = 0.28$
+- $H$: paciente tiene **hipertensión** → $P(H) = 0.34$
+- $ECV$: diagnóstico de **enfermedad cardiovascular**
+
+**Probabilidades condicionales conocidas:**
+
+$$P(ECV \mid F \cap H) = 0.45$$
+$$P(ECV \mid F \cap H^c) = 0.20$$
+$$P(ECV \mid F^c \cap H) = 0.18$$
+$$P(ECV \mid F^c \cap H^c) = 0.05$$
+
+---
+
+**Visualización del riesgo cardiovascular**
+
+</br>
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 3.5
+
+riesgo <- data.frame(
+  perfil = c("Sin factores\n(F\u1d9c \u2229 H\u1d9c)",
+             "Solo HTA\n(F\u1d9c \u2229 H)",
+             "Solo fuma\n(F \u2229 H\u1d9c)",
+             "Ambos\n(F \u2229 H)"),
+  prob   = c(0.05, 0.18, 0.20, 0.45),
+  color  = c("#A5D6A7","#FFF176","#FFCC80","#EF9A9A")
+)
+riesgo$perfil <- factor(riesgo$perfil, levels = riesgo$perfil)
+
+ggplot(riesgo, aes(x = perfil, y = prob)) +
+  geom_col(aes(fill = color), color = "black", linewidth = 0.7, width = 0.65) +
+  geom_text(aes(label = paste0(prob * 100, "%")),
+            vjust = -0.4, size = 5, fontface = "bold") +
+  scale_fill_identity() +
+  scale_y_continuous(limits = c(0, 0.56),
+                     labels = function(x) paste0(x * 100, "%")) +
+  theme_minimal(base_size = 11) +
+  labs(x = "", y = "P(ECV | perfil)", title = "Riesgo cardiovascular segun perfil") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank())
+```
+
+::: {.fragment}
+Con ambos factores el riesgo es **9 veces mayor** que sin ninguno.
+:::
+
+## Ejemplo 3: Tabla de Contingencia
+
+En un estudio con **1000 pacientes** se analiza la relación entre **vacunación** y **gripe** en un determinado mes:
+
+| | **Con gripe** | **Sin gripe** | **Total** |
+|:--|:---:|:---:|:---:|
+| **Vacunado** | 20 | 480 | 500 |
+| **No vacunado** | 80 | 420 | 500 |
+| **Total** | 100 | 900 | 1 000 |
+
+---
+
+### Probabilidades condicionales
+
+
+$$P(\text{Gripe} \mid \text{Vacunado}) = \frac{20}{500} = 0.04$$
+
+$$P(\text{Gripe} \mid \text{No vacunado}) = \frac{80}{500} = 0.16$$
+
+$$P(\text{Gripe}) = \frac{100}{1000} = 0.10$$
+
+---
+
+
+**¿Son independientes vacunación y gripe?**
+
+::: {.fragment}
+
+$$P(\text{Gripe} \mid \text{Vacunado}) = 0.04 \neq P(\text{Gripe}) = 0.10$$
+</br>
+
+* La vacunación y la gripe **NO son eventos independientes**.
+
+* La vacunación **reduce el riesgo** en un **75%**:
+
+$$RR = \frac{0.04}{0.16} = 0.25$$
+
+:::
+
+
+# PROBABILIDAD TOTAL {background-color="#0077b6"}
+
+## Teorema de Probabilidad Total
+
+>
+> Sea $\{B_1, B_2, \ldots, B_k\}$ una **partición** de $\Omega$ (eventos mutuamente excluyentes y exhaustivos). Para cualquier evento $A$:
+>
+> $$\boxed{P(A) = \sum_{i=1}^{k} P(A \mid B_i) \cdot P(B_i)}$$
+
+---
+
+::: {.fragment}
+
+**Idea central:** Cuando no es posible calcular $P(A)$ directamente, se *descompone* el problema en **escenarios** $B_i$ donde sí se conocen las probabilidades condicionales.
+
+:::
+
+</br>
+
+::: {.fragment}
+
+**Condiciones de la partición:**
+
+- $B_i \cap B_j = \emptyset \quad (i \neq j)$ — eventos **mutuamente excluyentes**
+- $\bigcup_{i=1}^{k} B_i = \Omega$ — eventos **exhaustivos** (cubren todo $\Omega$)
+
+:::
+
+## Ilustración
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 4.5
+#| fig-width: 9
+
+theta <- seq(0, 2 * pi, length.out = 300)
+ellA  <- data.frame(
+  x = 4.5 + 4.1 * cos(theta),
+  y = 2.0 + 1.25 * sin(theta)
+)
+omega_r <- data.frame(x = c(0, 9, 9, 0), y = c(0, 0, 4, 4))
+b1 <- data.frame(x = c(0, 3, 3, 0), y = c(0, 0, 4, 4))
+b2 <- data.frame(x = c(3, 6, 6, 3), y = c(0, 0, 4, 4))
+b3 <- data.frame(x = c(6, 9, 9, 6), y = c(0, 0, 4, 4))
+
+ggplot() +
+  geom_polygon(data = b1, aes(x, y),
+               fill = "#BBDEFB", color = "#1565C0", linewidth = 1.1) +
+  geom_polygon(data = b2, aes(x, y),
+               fill = "#C8E6C9", color = "#2E7D32", linewidth = 1.1) +
+  geom_polygon(data = b3, aes(x, y),
+               fill = "#FFE0B2", color = "#E65100", linewidth = 1.1) +
+  geom_polygon(data = ellA, aes(x, y),
+               fill = "#EF9A9A", color = "#B71C1C", linewidth = 1.8, alpha = 0.55) +
+  geom_polygon(data = omega_r, aes(x, y),
+               fill = NA, color = "black", linewidth = 2) +
+  annotate("text", x = 1.5, y = 3.55, label = "B[1]", parse = TRUE,
+           size = 7, fontface = "bold", color = "#1565C0") +
+  annotate("text", x = 4.5, y = 3.55, label = "B[2]", parse = TRUE,
+           size = 7, fontface = "bold", color = "#2E7D32") +
+  annotate("text", x = 7.5, y = 3.55, label = "B[3]", parse = TRUE,
+           size = 7, fontface = "bold", color = "#E65100") +
+  annotate("text", x = 4.5, y = 1.35, label = "A",
+           size = 9, fontface = "bold", color = "#B71C1C") +
+  annotate("text", x = 1.05, y = 1.85, label = "A\u2229B[1]", parse = FALSE,
+           size = 3.8, color = "#4A148C", fontface = "bold") +
+  annotate("text", x = 4.50, y = 1.85, label = "A\u2229B[2]", parse = FALSE,
+           size = 3.8, color = "#4A148C", fontface = "bold") +
+  annotate("text", x = 7.20, y = 1.85, label = "A\u2229B[3]", parse = FALSE,
+           size = 3.8, color = "#4A148C", fontface = "bold") +
+  annotate("text", x = -0.45, y = 3.85, label = "\u03a9",
+           size = 9, fontface = "bold") +
+  annotate("text", x = 4.5, y = -0.45,
+           label = "P(A) = P(A|B1)\u00b7P(B1) + P(A|B2)\u00b7P(B2) + P(A|B3)\u00b7P(B3)",
+           size = 4.2, fontface = "bold.italic", color = "#333333") +
+  theme_void() + coord_fixed()
+```
+
+## Ejemplo 1: Complicaciones Post-Quirúrgicas
+
+Una red hospitalaria atiende pacientes provenientes de **tres clínicas** con diferente nivel de complejidad:
+
+| Clínica | Proporción de pacientes | P(Complicación) |
+|---------|:-----------------------:|:---------------:|
+| A — alta especialización | $P(B_1) = 0.40$ | $P(A\mid B_1) = 0.05$ |
+| B — mediana complejidad | $P(B_2) = 0.35$ | $P(A\mid B_2) = 0.10$ |
+| C — baja complejidad | $P(B_3) = 0.25$ | $P(A\mid B_3) = 0.20$ |
+
+</br>
+
+::: {.fragment}
+
+**¿Cuál es la probabilidad de que un paciente tomado al azar de la red tenga complicaciones?**
+
+:::
+
+---
+
+### Solución
+
+$$P(A) = P(A\mid B_1)\,P(B_1) + P(A\mid B_2)\,P(B_2) + P(A\mid B_3)\,P(B_3)$$
+
+::: {.fragment}
+
+$$P(A) = (0.05)(0.40) + (0.10)(0.35) + (0.20)(0.25)$$
+
+$$P(A) = 0.020 + 0.035 + 0.050$$
+
+$$\boxed{P(A) = 0.105}$$
+
+:::
+
+::: {.fragment}
+
+La probabilidad de complicaciones en la red es del **10.5%**.
+:::
+
+## Ejemplo 2: Rehabilitación Intensiva en Fisioterapia
+
+Los pacientes de un servicio de fisioterapia provienen de tres fuentes de remisión:
+
+- $B_1$: Medicina General — $P(B_1) = 0.60$
+- $B_2$: Ortopedia — $P(B_2) = 0.30$
+- $B_3$: Neurología — $P(B_3) = 0.10$
+
+La probabilidad de requerir **rehabilitación intensiva** ($R$) según la fuente:
+
+$$P(R\mid B_1)=0.15, \quad P(R\mid B_2)=0.40, \quad P(R\mid B_3)=0.70$$
+
+**¿Cuál es la probabilidad de que un paciente elegido al azar requiera de rehabilitación intensiva?**
+
+---
+
+</br></br>
+::: {.fragment}
+
+$$P(R) = (0.15)(0.60)+(0.40)(0.30)+(0.70)(0.10)$$
+$$P(R) = 0.09+0.12+0.07 = \boxed{0.28}$$
+</br>
+
+El **28%** de los pacientes del servicio requieren rehabilitación intensiva.
+
+:::
+
+## Diagrama de árbol
+
+Los **diagramas de árbol** son una herramienta visual que permiten organizar y calcular probabilidades con el Teorema de Probabilidad Total.
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 5.6
+#| fig-width: 11
+
+nodos <- data.frame(
+  x     = c(0,   2.0,  2.0,  2.0,   4.2,   4.2,   4.2,   4.2,   4.2,   4.2),
+  y     = c(0,   3.0,  0.0, -3.0,   3.65,  2.35,  0.65, -0.65, -2.35, -3.65),
+  label = c("Inicio",
+            "Clinica A\nP=0.40",
+            "Clinica B\nP=0.35",
+            "Clinica C\nP=0.25",
+            "Complic.\nP=0.05",
+            "Sin complic.\nP=0.95",
+            "Complic.\nP=0.10",
+            "Sin complic.\nP=0.90",
+            "Complic.\nP=0.20",
+            "Sin complic.\nP=0.80"),
+  tipo  = c("raiz","rama","rama","rama",
+            "hoja_si","hoja_no","hoja_si","hoja_no","hoja_si","hoja_no"),
+  joint = c("","","","",
+            "0.40\u00d70.05 = 0.020",
+            "0.40\u00d70.95 = 0.380",
+            "0.35\u00d70.10 = 0.035",
+            "0.35\u00d70.90 = 0.315",
+            "0.25\u00d70.20 = 0.050",
+            "0.25\u00d70.80 = 0.200")
+)
+
+aristas <- data.frame(
+  x    = c(0, 0, 0, 2, 2, 2, 2, 2, 2),
+  y    = c(0, 0, 0, 3, 3, 0, 0,-3,-3),
+  xend = c(2, 2, 2, 4.2, 4.2, 4.2, 4.2, 4.2, 4.2),
+  yend = c(3, 0,-3, 3.65, 2.35, 0.65,-0.65,-2.35,-3.65),
+  prob = c("0.40","0.35","0.25",
+           "0.05","0.95","0.10","0.90","0.20","0.80")
+)
+
+fill_cols <- c("raiz"    = "#FFF9C4",
+               "rama"    = "#BBDEFB",
+               "hoja_si" = "#FFCDD2",
+               "hoja_no" = "#C8E6C9")
+
+nodos_joint <- nodos[nodos$joint != "", ]
+
+ggplot() +
+  geom_segment(data = aristas,
+               aes(x = x, y = y, xend = xend, yend = yend),
+               color = "gray50", linewidth = 0.9) +
+  geom_text(data = aristas,
+            aes(x = (x + xend)/2 - 0.08,
+                y = (y + yend)/2 + 0.28,
+                label = prob),
+            size = 3.2, color = "#1565C0", fontface = "bold") +
+  geom_label(data = nodos,
+             aes(x = x, y = y, label = label, fill = tipo),
+             size = 2.9, label.padding = unit(0.22, "lines"),
+             label.r = unit(0.12, "lines")) +
+  geom_text(data = nodos_joint,
+            aes(x = x + 0.08, y = y - 0.62, label = joint),
+            size = 2.5, color = "#6A1B9A", fontface = "italic") +
+  scale_fill_manual(values = fill_cols) +
+  theme_void() +
+  theme(legend.position = "none") +
+  labs(title    = "Diagrama de arbol: complicaciones por clinica",
+       subtitle = "P(Complicacion) = 0.020 + 0.035 + 0.050 = 0.105") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold", size = 12),
+        plot.subtitle = element_text(hjust = 0.5, color = "#B71C1C",
+                                     face = "bold", size = 11))
+```
+
+# TEOREMA DE BAYES {background-color="#0077b6"}
+
+## Teorema de Bayes
+
+>
+> Sea $\{B_1, B_2, \ldots, B_k\}$ una partición de $\Omega$ con $P(B_i) > 0$. Para cualquier evento $A$ con $P(A) > 0$:
+>
+> $$\boxed{P(B_i \mid A) = \frac{P(A \mid B_i)\cdot P(B_i)}{P(A)} = \frac{P(A \mid B_i)\cdot P(B_i)}{\displaystyle\sum_{j=1}^{k} P(A \mid B_j)\cdot P(B_j)}}$$
+
+---
+
+::: {.fragment}
+
+**Las tres piezas del teorema:**
+
+| Componente | Nombre | Significado |
+|-----------|--------|-------------|
+| $P(B_i)$ | **Probabilidad a priori** | Antes de observar $A$ |
+| $P(A\mid B_i)$ | **Verosimilitud** | Qué tan probable es $A$ en el escenario $B_i$ |
+| $P(B_i\mid A)$ | **Probabilidad a posteriori** | Después de observar que $A$ ocurrió |
+
+:::
+
+::: {.fragment}
+
+> 💡 Bayes nos permite **actualizar resultados** con nueva evidencia. Es la base del razonamiento diagnóstico en ciencias como la medicina.
+
+:::
+
+## Ejemplo 1: ¿De qué clínica proviene el paciente?
+
+Retomando el ejemplo de complicaciones post-quirúrgicas:
+
+$$P(B_1)=0.40 \quad P(B_2)=0.35 \quad P(B_3)=0.25$$
+$$P(A\mid B_1)=0.05 \quad P(A\mid B_2)=0.10 \quad P(A\mid B_3)=0.20$$
+$$P(A) = 0.105$$
+
+</br>
+
+**Pregunta:** Si un paciente presentó complicaciones, ¿cuál es la probabilidad de que proveniera de la Clínica C?
+
+---
+
+### Solución con Teorema de Bayes
+
+$$P(B_3 \mid A) = \frac{P(A\mid B_3)\cdot P(B_3)}{P(A)} = \frac{(0.20)(0.25)}{0.105} = \frac{0.050}{0.105} \approx \boxed{0.476}$$
+
+::: {.fragment}
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 2.9
+#| fig-width: 9
+
+comp <- data.frame(
+  clinica   = rep(c("Clinica A","Clinica B","Clinica C"), 2),
+  tipo      = rep(c("A priori  P(Bi)","A posteriori  P(Bi | Complic.)"), each = 3),
+  prob      = c(0.40, 0.35, 0.25,
+                0.020/0.105, 0.035/0.105, 0.050/0.105),
+  color     = rep(c("#42A5F5","#66BB6A","#FFA726"), 2),
+  alpha_val = rep(c(0.45, 1.0), each = 3)
+)
+
+ggplot(comp, aes(x = clinica, y = prob, group = tipo)) +
+  geom_col(aes(fill = color, alpha = alpha_val),
+           position = "dodge", color = "black", linewidth = 0.6, width = 0.65) +
+  geom_text(aes(label = paste0(round(prob * 100, 1), "%")),
+            position = position_dodge(width = 0.65),
+            vjust = -0.4, size = 4, fontface = "bold") +
+  scale_fill_identity() +
+  scale_alpha_identity() +
+  scale_y_continuous(labels = function(x) paste0(round(x * 100), "%"),
+                     limits = c(0, 0.52)) +
+  facet_wrap(~tipo) +
+  theme_minimal(base_size = 11) +
+  labs(x = "", y = "Probabilidad",
+       title = "Actualizacion de probabilidades con el Teorema de Bayes") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank(),
+        strip.text    = element_text(face = "bold", size = 10))
+```
+
+La Clínica C concentra el **47.6%** de las complicaciones, aunque solo aporta el 25% de los pacientes.
+
+:::
+
+## Ejemplo 2: Valor Predictivo Positivo
+
+Una **prueba diagnóstica** para tuberculosis (TB) tiene las siguientes características:
+
+| Parámetro | Definición | Valor |
+|-----------|-----------|:-----:|
+| Prevalencia | $P(TB)$ | 1% |
+| Sensibilidad | $P(+\mid TB)$ | 95% |
+| Especificidad | $P(-\mid TB^c)$ | 90% |
+
+</br>
+
+**¿Cuál es la probabilidad de tener TB dado un resultado positivo?**
+*(Valor Predictivo Positivo — VPP)*
+
+---
+
+### Solución paso a paso
+
+**Paso 1 — Probabilidad Total** de resultado positivo:
+
+$$P(+) = P(+\mid TB)\cdot P(TB) + P(+\mid TB^c)\cdot P(TB^c)$$
+$$P(+) = (0.95)(0.01)+(0.10)(0.99) = 0.0095+0.099 = 0.1085$$
+
+::: {.fragment}
+
+**Paso 2 — Teorema de Bayes:**
+
+$$P(TB\mid +) = \frac{P(+\mid TB)\cdot P(TB)}{P(+)} = \frac{(0.95)(0.01)}{0.1085} \approx \boxed{0.0875}$$
+
+:::
+
+::: {.fragment}
+
+> ⚠️ Aunque la prueba es positiva, la probabilidad de **realmente tener TB es solo del 8.75%**. Esto se debe a la **baja prevalencia** (1%): la mayoría de los positivos son **falsos positivos**.
+
+:::
+
+---
+
+### La paradoja del falso positivo
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 3.6
+#| fig-width: 9
+
+# Simulated population of 10 000
+pob <- data.frame(
+  grupo = c("Verdadero positivo\n(tiene TB, test +)",
+            "Falso positivo\n(no tiene TB, test +)",
+            "Falso negativo\n(tiene TB, test -)",
+            "Verdadero negativo\n(no tiene TB, test -)"),
+  n     = c(95, 990, 5, 8910),
+  color = c("#C62828","#EF9A9A","#81C784","#1B5E20"),
+  tipo  = c("Test Positivo","Test Positivo","Test Negativo","Test Negativo")
+)
+
+ggplot(pob, aes(x = tipo, y = n, fill = color)) +
+  geom_col(position = "stack", color = "white", linewidth = 1.2) +
+  geom_text(aes(label = paste0(grupo, "\nn = ", n)),
+            position = position_stack(vjust = 0.5),
+            size = 3.2, fontface = "bold",
+            color = c("white","#7B0000","white","white")) +
+  scale_fill_identity() +
+  scale_y_continuous(labels = function(x) paste0(x/100, "%  (", x, ")")) +
+  theme_minimal(base_size = 12) +
+  labs(x = "", y = "Personas (de 10 000)",
+       title    = "Distribucion de 10 000 personas sometidas a la prueba de TB",
+       subtitle = "De los 1085 tests positivos, solo 95 tienen realmente TB (8.75%)") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, color = "#C62828"),
+        panel.grid.minor = element_blank())
+```
+
+---
+
+### Implicación clínica
+
+**¿Qué sucede si aumenta la prevalencia?**
+
+::: columns
+
+::: {.column width="45%"}
+
+```{r}
+#| echo: false
+#| fig-height: 8.2
+#| fig-align: center
+
+prev_vals <- c(0.001, 0.005, 0.01, 0.05, 0.10, 0.20, 0.30)
+vpp_vals  <- (0.95 * prev_vals) /
+             (0.95 * prev_vals + 0.10 * (1 - prev_vals))
+
+df_vpp <- data.frame(prevalencia = prev_vals * 100, VPP = vpp_vals * 100)
+
+ggplot(df_vpp, aes(x = prevalencia, y = VPP)) +
+  geom_line(color = "#1565C0", linewidth = 1.5) +
+  geom_point(color = "#1565C0", size = 3) +
+  geom_point(data = df_vpp[df_vpp$prevalencia == 1, ],
+             aes(x = prevalencia, y = VPP),
+             color = "#C62828", size = 5) +
+  annotate("text", x = 3.5, y = 10,
+           label = "Prevalencia 1%\nVPP = 8.75%",
+           size = 3.5, color = "#C62828", fontface = "bold") +
+  scale_x_continuous(labels = function(x) paste0(x, "%")) +
+  scale_y_continuous(limits = c(0, 100),
+                     labels = function(x) paste0(x, "%")) +
+  theme_minimal(base_size = 11) +
+  labs(x = "Prevalencia de TB", y = "VPP",
+       title = "El VPP aumenta con la prevalencia") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank())
+```
+
+:::
+
+::: {.column width="55%"}
+
+**Lección para la práctica clínica:**
+
+- En poblaciones de **baja prevalencia**, un test positivo tiene **bajo VPP** → se requieren pruebas confirmatorias.
+
+- En poblaciones de **alto riesgo** (mayor prevalencia), el mismo test tiene **mayor VPP** → el resultado es más confiable.
+:::
+
+:::
+
+> Con **Bayes** se actualiza la probabilidad de enfermedad con base en los resultados de las pruebas.
