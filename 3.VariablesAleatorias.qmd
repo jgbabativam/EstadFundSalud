@@ -1,0 +1,1176 @@
+---
+title: "Estadística Fundamental para Ciencias de la Salud"
+subtitle: "Variables Aleatorias y Distribuciones de Probabilidad"
+author:
+    name: Giovany Babativa-Márquez, PhD
+    email: jgbabativam@unal.edu.co
+format:
+  gbabativa-revealjs:
+    footer: "Diapositivas disponibles en [GitHub](https://github.com/jgbabativam)."
+    logo: "images/UNAL.png"
+incremental: false
+embed-resources: true
+highlight-style: dracula
+execute:
+  echo: false
+  eval: true
+filters:
+  - webr
+revealjs-plugins:
+  - drop
+---
+
+```{r}
+library(pacman)
+p_load(here, ggplot2, dplyr, tidyr)
+```
+
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+# VARIABLES ALEATORIAS {background-color="#0077b6"}
+
+## ¿Qué es una Variable Aleatoria?
+
+### Definición formal
+
+<div style="text-align: justify;">
+
+Una **variable aleatoria** $X$ es una función que asigna un valor numérico a cada resultado de un experimento aleatorio:
+
+$$X : \Omega \longrightarrow \mathbb{R}$$
+
+</div>
+
+::: {.fragment}
+
+::: {.callout-tip}
+
+Cuando realizamos un examen clínico, el resultado es incierto antes de hacerlo. La **variable aleatoria** es el mecanismo que convierte ese resultado en un número con el que podemos operar matemáticamente.
+
+:::
+
+:::
+
+---
+
+### Ejemplos en Ciencias de la Salud 
+
+</br>
+
+<div style="font-size:0.75em; line-height:1.1;">
+
+| Experimento | Variable aleatoria $X$ | Valores posibles |
+|-------------|----------------------|-----------------|
+| Tomar la presión arterial | Presión sistólica (mmHg) | $[0, +\infty)$ |
+| Revisar una sala de urgencias | Número de pacientes | $0, 1, 2, \ldots$ |
+| Aplicar un tratamiento | Tiempo de recuperación (días) | $(0, +\infty)$ |
+| Realizar prueba diagnóstica | Resultado (positivo/negativo) | $\{0, 1\}$ |
+| Controlar UCI en un turno | Camas ocupadas | $0, 1, \ldots, n$ |
+
+</div>
+
+## Tipos de Variables Aleatorias {style="font-size: 90%;"}
+
+::: columns
+
+::: {.column width="50%"}
+
+### Discreta
+
+Toma valores **contables** (finitos o infinito numerable):
+
+$$X \in \{x_1, x_2, x_3, \ldots\}$$
+
+**Ejemplos clínicos:**
+
+- Número de pacientes con fiebre en una sala
+- Número de medicamentos administrados
+- Conteo de eventos adversos por turno
+
+:::
+
+::: {.column width="50%"}
+
+### Continua
+
+Toma valores en un **intervalo** de $\mathbb{R}$ (infinito no numerable):
+
+$$X \in (a, b) \subseteq \mathbb{R}$$
+
+**Ejemplos clínicos:**
+
+- Presión arterial (mmHg)
+- Temperatura corporal (°C)
+- Peso del paciente (kg)
+- Tiempo hasta el alta (horas)
+
+:::
+
+:::
+
+## Función de Distribución Acumulada (FDA) {style="font-size: 90%;"}
+
+### Definición
+
+Para cualquier variable aleatoria $X$ (discreta o continua), la **función de distribución acumulada** es:
+
+$$\boxed{F(x) = P(X \leq x), \quad x \in \mathbb{R}}$$
+
+::: {.fragment}
+
+### Propiedades
+
+- $0 \leq F(x) \leq 1$ para todo $x$
+- $F$ es **no decreciente**: si $a < b$ entonces $F(a) \leq F(b)$
+- $\displaystyle\lim_{x \to -\infty} F(x) = 0$ y $\displaystyle\lim_{x \to +\infty} F(x) = 1$
+- $P(a < X \leq b) = F(b) - F(a)$
+
+:::
+
+# VARIABLES DISCRETAS {background-color="#0077b6"} 
+
+## Función de Probabilidad Puntual (FPP) {style="font-size: 90%;"}
+
+### Definición
+
+Para una variable aleatoria discreta $X$, la **función de probabilidad puntual** se define como:
+
+$$\boxed{p(x) = P(X = x)}$$
+
+::: {.fragment}
+
+### Propiedades
+
+1. $p(x) \geq 0$, $\forall x$
+2. $\displaystyle\sum_{x} p(x) = 1$
+3. $P(X \in A) = \displaystyle\sum_{x \in A} p(x)$
+
+:::
+
+## Ejemplo: Eventos adversos por turno
+
+En una unidad de hospitalización se registra el número de **eventos adversos leves** $X$ durante un turno de 8 horas:
+
+| $x$ | 0 | 1 | 2 | 3 | 4 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| $p(x)$ | 0.30 | 0.35 | 0.20 | 0.10 | 0.05 |
+
+::: {.fragment}
+
+**Verificación:**
+
+$$\sum p(x) = 0.30 + 0.35 + 0.20 + 0.10 + 0.05 = 1 \checkmark$$
+
+:::
+
+---
+
+### Cálculo de probabilidades
+
+Con la distribución de eventos adversos:
+
+$$P(X \geq 2) = p(2) + p(3) + p(4) = 0.20 + 0.10 + 0.05 = \mathbf{0.35}$$
+
+::: {.fragment}
+
+$$P(1 \leq X \leq 3) = p(1) + p(2) + p(3) = 0.35 + 0.20 + 0.10 = \mathbf{0.65}$$
+
+:::
+
+::: {.fragment}
+
+$$P(X < 2) = p(0) + p(1) = 0.30 + 0.35 = \mathbf{0.65}$$
+
+:::
+
+## Representación gráfica de la FPP
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 4.2
+#| fig-width: 9
+
+df_ea <- data.frame(x = 0:4,
+                    prob = c(0.30, 0.35, 0.20, 0.10, 0.05))
+
+ggplot(df_ea, aes(x = factor(x), y = prob)) +
+  geom_col(fill = "#1565C0", color = "white", width = 0.55, alpha = 0.85) +
+  geom_text(aes(label = prob), vjust = -0.4, size = 5, fontface = "bold",
+            color = "#1565C0") +
+  scale_y_continuous(limits = c(0, 0.42),
+                     labels = function(x) paste0(x * 100, "%")) +
+  theme_minimal(base_size = 13) +
+  labs(x = "Número de eventos adversos (X)",
+       y = "Probabilidad P(X = x)",
+       title = "Distribución de probabilidad: eventos adversos por turno") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank())
+```
+
+# VARIABLES CONTINUAS {background-color="#0077b6"}
+
+## Función de Densidad de Probabilidad (FDP) 
+
+### Definición
+
+Para una variable aleatoria continua $X$, la **función de densidad de probabilidad** $f(x)$ satisface:
+
+$$\boxed{P(a \leq X \leq b) = \int_a^b f(x)\, dx}$$
+
+---
+
+::: {.fragment}
+
+### Propiedades
+
+1. $f(x) \geq 0$ para todo $x$
+2. $\displaystyle\int_{-\infty}^{+\infty} f(x)\, dx = 1$
+3. **Importante:** $P(X = x) = 0$ para cualquier valor puntual
+4. $P(a < X < b) = P(a \leq X \leq b) = F(b) - F(a)$
+
+:::
+
+## Interpretación gráfica
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 6.5
+#| fig-width: 12
+
+x_vals <- seq(0, 20, length.out = 500)
+fx <- dexp(x_vals, rate = 1/5)
+
+df_dens <- data.frame(x = x_vals, fx = fx)
+df_shade <- data.frame(x = x_vals[x_vals >= 3 & x_vals <= 8],
+                       fx = fx[x_vals >= 3 & x_vals <= 8])
+
+ggplot(df_dens, aes(x, fx)) +
+  geom_area(data = df_shade, aes(x = x, y = fx),
+            fill = "#1565C0", alpha = 0.35) +
+  geom_line(color = "#1565C0", linewidth = 1.8) +
+  geom_vline(xintercept = c(3, 8), linetype = "dashed",
+             color = "#C62828", linewidth = 1.0) +
+  annotate("text", x = 5.5, y = 0.035, size = 5.5, fontface = "bold",
+           color = "#1565C0",
+           label = "P(3 ≤ X ≤ 8) = ∫ f(x)dx") +
+  annotate("text", x = 2.6, y = -0.004, label = "3", size = 4.5,
+           color = "#C62828", fontface = "bold") +
+  annotate("text", x = 8.4, y = -0.004, label = "8", size = 4.5,
+           color = "#C62828", fontface = "bold") +
+  scale_y_continuous(limits = c(-0.008, 0.24)) +
+  theme_minimal(base_size = 13) +
+  labs(x = "Tiempo de recuperación (días)",
+       y = "Densidad f(x)",
+       title = "La probabilidad es el área bajo la curva de densidad") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank())
+```
+
+## Ejemplo: Tiempo de recuperación post-cirugía
+
+El tiempo de recuperación $X$ (en días) tras una cirugía de rodilla sigue una distribución con densidad:
+
+$$f(x) = \frac{1}{5} e^{-x/5}, \quad x > 0$$
+
+::: {.fragment}
+
+**¿Cuál es la probabilidad de recuperarse en menos de 3 días?**
+
+$$P(X < 3) = \int_0^3 \frac{1}{5} e^{-x/5}\, dx = 1 - e^{-3/5} \approx 0.451$$
+
+:::
+
+::: {.fragment}
+
+**¿Y entre 5 y 10 días?**
+
+$$P(5 < X < 10) = e^{-1} - e^{-2} \approx 0.368 - 0.135 = 0.233$$
+
+:::
+
+# VALOR ESPERADO {background-color="#0077b6"}
+
+## Definición: Valor Esperado
+
+El **valor esperado** (o media) de una variable aleatoria $X$ mide su valor promedio en el largo plazo.
+
+::: columns
+
+::: {.column width="50%"}
+
+### Variable discreta
+
+$$\boxed{E[X] = \sum_{x} x \cdot p(x)}$$
+
+:::
+
+::: {.column width="50%"}
+
+### Variable continua
+
+$$\boxed{E[X] = \int_{-\infty}^{+\infty} x \cdot f(x)\, dx}$$
+
+:::
+
+:::
+
+::: {.fragment}
+
+> **Interpretación clínica:** Si observamos el mismo proceso clínico muchas veces, $E[X]$ es el promedio de los resultados que obtendríamos.
+
+:::
+
+## Ejemplo: Eventos adversos
+
+Retomando la distribución de eventos adversos por turno:
+
+| $x$ | 0 | 1 | 2 | 3 | 4 |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| $p(x)$ | 0.30 | 0.35 | 0.20 | 0.10 | 0.05 |
+
+::: {.fragment}
+
+$$E[X] = 0(0.30) + 1(0.35) + 2(0.20) + 3(0.10) + 4(0.05)$$
+
+$$E[X] = 0 + 0.35 + 0.40 + 0.30 + 0.20 = \mathbf{1.25}$$
+
+:::
+
+::: {.fragment}
+
+**Interpretación:** En promedio se producen **1.25 eventos adversos leves** por turno de 8 horas en esta unidad.
+
+:::
+
+## Propiedades del Valor Esperado
+
+Sea $X$, $Y$ variables aleatorias y $a$, $b$ constantes:
+
+1. $E[a] = a$
+2. $E[aX] = a \cdot E[X]$
+3. $E[X + b] = E[X] + b$
+
+::: {.fragment}
+
+4. **Linealidad:** $E[aX + b] = a \cdot E[X] + b$
+5. **Aditividad:** $E[X + Y] = E[X] + E[Y]$ (siempre)
+6. Si $X$ e $Y$ son independientes: $E[XY] = E[X] \cdot E[Y]$
+
+:::
+
+---
+
+### Aplicación clínica: Transformación de escala
+
+La **frecuencia cardíaca** de un paciente en reposo tiene $E[FC] = 72$ lpm.
+
+::: {.fragment}
+
+Si medimos en otra unidad: $FC^* = 0.5 \cdot FC + 10$ (escala relativa):
+
+$$E[FC^*] = 0.5 \cdot E[FC] + 10 = 0.5 \cdot 72 + 10 = \mathbf{46}$$
+
+:::
+
+::: {.fragment}
+
+Si registramos la **suma** de frecuencias cardíacas de 3 pacientes:
+
+$$E[FC_1 + FC_2 + FC_3] = E[FC_1] + E[FC_2] + E[FC_3] = 72 + 72 + 72 = \mathbf{216}$$
+
+:::
+
+# VARIANZA Y DESVIACIÓN ESTÁNDAR {background-color="#0077b6"}
+
+## Definición: Varianza {style="font-size: 90%;"}
+
+La **varianza** mide la dispersión de $X$ alrededor de su media $\mu = E[X]$:
+
+$$\boxed{Var(X) = E\left[(X - \mu)^2\right]}$$
+
+::: {.fragment}
+
+### Fórmula de cálculo (equivalente y más práctica)
+
+$$\boxed{Var(X) = E[X^2] - (E[X])^2}$$
+
+:::
+
+::: {.fragment}
+
+### Desviación estándar
+
+$$\sigma_X = \sqrt{Var(X)}$$
+
+La desviación estándar tiene las **mismas unidades** que $X$, lo que facilita su interpretación clínica.
+
+:::
+
+## Ejemplo: Varianza de eventos adversos
+
+| $x$ | $p(x)$ | $x^2$ | $x^2 \cdot p(x)$ |
+|:---:|:---:|:---:|:---:|
+| 0 | 0.30 | 0 | 0.000 |
+| 1 | 0.35 | 1 | 0.350 |
+| 2 | 0.20 | 4 | 0.800 |
+| 3 | 0.10 | 9 | 0.900 |
+| 4 | 0.05 | 16 | 0.800 |
+
+::: {.fragment}
+
+$$E[X^2] = 2.850 \quad \Rightarrow \quad Var(X) = 2.850 - (1.25)^2 = 2.850 - 1.5625 = \mathbf{1.2875}$$
+
+$$\sigma_X = \sqrt{1.2875} \approx \mathbf{1.13} \text{ eventos adversos}$$
+
+:::
+
+## Propiedades de la Varianza {style="font-size: 90%;"}
+
+Sean $X$, $Y$ variables aleatorias, $a$, $b$ constantes:
+
+1. $Var(b) = 0$
+2. $Var(X + b) = Var(X)$
+3. $Var(aX) = a^2 \cdot Var(X)$
+4. **Lineal:** $Var(aX + b) = a^2 \cdot Var(X)$
+
+::: {.fragment}
+
+5. Si $X$ e $Y$ son **independientes**:
+$$Var(X + Y) = Var(X) + Var(Y)$$
+
+:::
+
+::: {.fragment}
+
+> **Nota:** En general, $Var(X + Y) = Var(X) + Var(Y) + 2\,Cov(X,Y)$
+
+:::
+
+# COVARIANZA Y CORRELACIÓN {background-color="#0077b6"}
+
+## Definición: Covarianza {style="font-size: 90%;"}
+
+La **covarianza** mide la relación lineal entre dos variables aleatorias $X$ e $Y$:
+
+$$\boxed{Cov(X,Y) = E\left[(X - \mu_X)(Y - \mu_Y)\right] = E[XY] - E[X]\cdot E[Y]}$$
+
+::: {.fragment}
+
+| Valor de $Cov(X,Y)$ | Interpretación |
+|:---:|:---|
+| $> 0$ | Cuando $X$ aumenta, $Y$ tiende a **aumentar** |
+| $< 0$ | Cuando $X$ aumenta, $Y$ tiende a **disminuir** |
+| $= 0$ | No hay relación lineal (puede haber relación no lineal) |
+
+:::
+
+## Correlación de Pearson
+
+La covarianza depende de las unidades. El **coeficiente de correlación** estandariza:
+
+$$\boxed{\rho_{XY} = \frac{Cov(X,Y)}{\sigma_X \cdot \sigma_Y}, \quad -1 \leq \rho \leq 1}$$
+
+::: {.fragment}
+
+| $\rho$ | Interpretación |
+|:---:|:---|
+| $\approx 1$ | Relación lineal positiva fuerte |
+| $\approx -1$ | Relación lineal negativa fuerte |
+| $\approx 0$ | Sin relación lineal |
+
+:::
+
+## Ejemplo clínico: IMC y Presión Arterial
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 7.0
+#| fig-width: 12
+
+set.seed(42)
+n <- 80
+imc <- rnorm(n, mean = 27, sd = 4.5)
+pas <- 90 + 1.4 * imc + rnorm(n, 0, 8)
+df_cov <- data.frame(imc = imc, pas = pas)
+
+ggplot(df_cov, aes(x = imc, y = pas)) +
+  geom_point(color = "#1565C0", alpha = 0.65, size = 2.5) +
+  geom_smooth(method = "lm", color = "#C62828", se = TRUE,
+              fill = "#FFCDD2", linewidth = 1.5) +
+  theme_minimal(base_size = 12) +
+  labs(x = "Índice de Masa Corporal (kg/m²)",
+       y = "Presión arterial sistólica (mmHg)",
+       title = "Correlación positiva: IMC y presión arterial",
+       subtitle = paste0("ρ = ",
+                         round(cor(imc, pas), 3),
+                         "  — a mayor IMC, mayor presión arterial")) +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, color = "#C62828"),
+        panel.grid.minor = element_blank())
+```
+
+# DISTRIBUCIONES DISCRETAS {background-color="#0077b6"}
+
+## Distribución Bernoulli {style="font-size: 90%;"}
+
+### Definición 
+
+Una variable aleatoria $X$ sigue una distribución **Bernoulli** con parámetro $p$ si el experimento tiene exactamente **dos resultados posibles**: éxito ($X=1$) o fracaso ($X=0$):
+
+$$X \sim \text{Ber}(p)$$
+
+::: {.fragment}
+
+### Función de probabilidad
+
+$$p(x) = p^x (1-p)^{1-x}, \quad x \in \{0, 1\}$$
+
+| | Fracaso ($X=0$) | Éxito ($X=1$) |
+|:---|:---:|:---:|
+| $p(x)$ | $1-p$ | $p$ |
+
+:::
+
+---
+
+### Parámetros
+
+$$E[X] = p \qquad Var(X) = p(1-p)$$
+
+::: {.fragment}
+
+### Ejemplos en Ciencias de la Salud 
+
+- Un paciente **responde** ($X=1$) o **no responde** ($X=0$) a un antibiótico, con $p = 0.80$
+- Un recién nacido presenta un **APGAR bajo** ($X=1$), con $p = 0.05$
+- Una prueba diagnóstica resulta **positiva** ($X=1$), con $p$ igual a la sensibilidad
+- Un paciente **desarrolla úlcera de presión** ($X=1$) en su estancia, con $p = 0.12$
+
+:::
+
+## Código R: Distribución Bernoulli
+
+</br>
+
+En R, la Bernoulli es un caso especial de la Binomial con `size = 1`:
+
+```{r}
+#| echo: true
+#| eval: true
+
+# P(X = 1): paciente responde al antibiótico, p = 0.80
+dbinom(x = 1, size = 1, prob = 0.80)
+
+# P(X = 0): paciente NO responde
+dbinom(x = 0, size = 1, prob = 0.80)
+
+# Valor esperado y varianza (p = 0.80)
+p <- 0.80
+cat("E[X] =", p, "\nVar(X) =", p * (1 - p))
+```
+
+## Distribución Binomial
+
+### Definición
+
+Si se realizan $n$ ensayos de Bernoulli **independientes**, cada uno con probabilidad de éxito $p$, la variable aleatoria $X$ = número de éxitos sigue una distribución **Binomial**:
+
+$$X \sim \text{Bin}(n, p)$$
+
+::: {.fragment}
+
+### Función de probabilidad
+
+$$\boxed{p(x) = \binom{n}{x} p^x (1-p)^{n-x}, \quad x = 0, 1, 2, \ldots, n}$$
+
+:::
+
+---
+
+### Parámetros
+
+$$\boxed{E[X] = np \qquad Var(X) = np(1-p)}$$
+
+::: {.fragment}
+
+### Condiciones de aplicación
+
+- $n$ ensayos **fijos** e independientes
+- Cada ensayo tiene solo dos resultados (éxito / fracaso)
+- La probabilidad de éxito $p$ es **constante** en cada ensayo
+
+:::
+
+::: {.fragment}
+
+### Ejemplo clínico
+
+De **15 pacientes** con neumonía bacteriana tratados con un antibiótico específico, cada uno tiene probabilidad de responder de $p = 0.75$, independientemente de los demás. Sea $X$ el número de pacientes que responden.
+
+$$X \sim \text{Bin}(15,\; 0.75)$$
+
+:::
+
+---
+
+### Cálculo manual
+
+</br></br>
+
+$$P(X = 12) = \binom{15}{12}(0.75)^{12}(0.25)^3 = 455 \cdot (0.75)^{12} \cdot (0.25)^3 \approx 0.225$$
+
+::: {.fragment}
+
+$$E[X] = 15 \times 0.75 = 11.25 \text{ pacientes}$$
+
+$$\sigma_X = \sqrt{15 \times 0.75 \times 0.25} = \sqrt{2.8125} \approx 1.68 \text{ pacientes}$$
+
+:::
+
+## Código R: Distribución Binomial
+
+</br>
+
+```{r}
+#| echo: true
+#| eval: true
+
+# X ~ Bin(15, 0.75): respuesta al antibiótico
+# P(X = 12): exactamente 12 pacientes responden
+dbinom(x = 12, size = 15, prob = 0.75)
+
+# P(X <= 10): a lo sumo 10 responden
+pbinom(q = 10, size = 15, prob = 0.75)
+
+# P(X >= 13): al menos 13 responden
+1 - pbinom(q = 12, size = 15, prob = 0.75)
+
+# Percentil 90 (mínimo k tal que P(X <= k) >= 0.90)
+qbinom(p = 0.90, size = 15, prob = 0.75)
+```
+
+## Visualización: Distribución Binomial
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 7.2
+#| fig-width: 12
+
+df_bin <- data.frame(x = 0:15,
+                     prob = dbinom(0:15, size = 15, prob = 0.75))
+
+ggplot(df_bin, aes(x = factor(x), y = prob,
+                   fill = x >= 12)) +
+  geom_col(color = "white", width = 0.65, alpha = 0.85) +
+  geom_text(aes(label = ifelse(prob > 0.01,
+                               round(prob, 3), "")),
+            vjust = -0.4, size = 3.5, fontface = "bold") +
+  scale_fill_manual(values = c("#90CAF9", "#1565C0"),
+                    labels = c("X < 12", "X ≥ 12"),
+                    name = "") +
+  scale_y_continuous(limits = c(0, 0.28)) +
+  theme_minimal(base_size = 12) +
+  labs(x = "Número de pacientes que responden (X)",
+       y = "P(X = x)",
+       title = "Bin(15, 0.75): Respuesta al antibiótico",
+       subtitle = "Área azul oscura = P(X ≥ 12) ≈ 0.461") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        legend.position = "top")
+```
+
+## Distribución Hipergeométrica
+
+### Definición
+
+Describe el número de éxitos al extraer $n$ elementos **sin reposición** de una población finita de $N$ elementos, de los cuales $K$ son del tipo de interés.
+
+$$X \sim \text{Hiper}(N, K, n)$$
+
+::: {.fragment}
+
+### Función de probabilidad
+
+$$\boxed{p(x) = \frac{\binom{K}{x}\binom{N-K}{n-x}}{\binom{N}{n}}, \quad x = \max(0, n+K-N), \ldots, \min(n, K)}$$
+
+:::
+
+---
+
+### Parámetros
+
+</br></br>
+
+$$E[X] = n \cdot \frac{K}{N} \qquad Var(X) = n \cdot \frac{K}{N} \cdot \frac{N-K}{N} \cdot \frac{N-n}{N-1}$$
+
+::: {.fragment}
+
+> El factor $\dfrac{N-n}{N-1}$ se llama **factor de corrección por población finita** y refleja que al no haber reposición, la varianza es menor que en la Binomial.
+
+:::
+
+---
+
+### Ejemplo clínico: Selección de pacientes para estudio
+
+Una sala de rehabilitación tiene **20 pacientes**, de los cuales **8 tienen diagnóstico de diabetes**. Se seleccionan al azar **6 pacientes** para participar en un programa piloto. 
+
+Sea $X$ = número de pacientes diabéticos seleccionados.
+
+$$X \sim \text{Hiper}(N=20,\; K=8,\; n=6)$$
+
+::: {.fragment}
+
+$$P(X = 2) = \frac{\binom{8}{2}\binom{12}{4}}{\binom{20}{6}} = \frac{28 \times 495}{38760} \approx 0.357$$
+
+:::
+
+::: {.fragment}
+
+$$E[X] = 6 \cdot \frac{8}{20} = 2.4 \quad \text{pacientes diabéticos esperados}$$
+
+:::
+
+## Código R: Distribución Hipergeométrica
+
+</br>
+
+```{r}
+#| echo: true
+#| eval: true
+
+# X ~ Hiper(N=20, K=8, n=6): pacientes diabéticos
+# dhyper(x, m, n, k): m=éxitos, n=fracasos, k=extraídos
+
+# P(X = 2): exactamente 2 diabéticos seleccionados
+dhyper(x = 2, m = 8, n = 12, k = 6)
+
+# P(X <= 3): a lo sumo 3 diabéticos
+phyper(q = 3, m = 8, n = 12, k = 6)
+
+# P(X >= 4): al menos 4 diabéticos
+1 - phyper(q = 3, m = 8, n = 12, k = 6)
+
+# Valor esperado
+6 * 8/20
+```
+
+## Distribución de Poisson
+
+### Definición
+
+Modela el número de **eventos raros o poco frecuentes** que ocurren en un intervalo de tiempo o espacio determinado, cuando los eventos ocurren a tasa constante e independientemente entre sí.
+
+$$X \sim \text{Poisson}(\lambda)$$
+
+::: {.fragment}
+
+### Función de probabilidad
+
+$$\boxed{p(x) = \frac{e^{-\lambda}\, \lambda^x}{x!}, \quad x = 0, 1, 2, \ldots}$$
+
+:::
+
+---
+
+### Parámetros
+
+$$\boxed{E[X] = \lambda \qquad Var(X) = \lambda}$$
+
+> Una característica única: **media = varianza = $\lambda$**.
+
+::: {.fragment}
+
+### Condiciones de aplicación en salud
+
+- Número de **ingresos a urgencias** por hora
+- Número de **infecciones nosocomiales** por semana
+- Casos de una **enfermedad rara** en una población por año
+- Número de **caídas de pacientes** en una unidad por mes
+- Llamadas al **servicio de emergencias** por noche
+
+:::
+
+---
+
+### Ejemplo: Ingresos a urgencias
+
+En un hospital, el promedio de pacientes que ingresan a urgencias es de **$\lambda = 4$ pacientes por hora**. Sea $X$ el número de ingresos en una hora.
+
+$$X \sim \text{Poisson}(4)$$
+
+::: {.fragment}
+
+$$P(X = 6) = \frac{e^{-4} \cdot 4^6}{6!} = \frac{0.0183 \times 4096}{720} \approx 0.104$$
+
+:::
+
+::: {.fragment}
+
+$$P(X \leq 2) = \sum_{x=0}^{2} \frac{e^{-4} \cdot 4^x}{x!} = e^{-4}(1 + 4 + 8) = 0.238$$
+
+:::
+
+## Código R: Distribución de Poisson
+
+</br>
+
+```{r}
+#| echo: true
+#| eval: true
+
+# X ~ Poi(4): ingresos a urgencias por hora
+# P(X = 6): exactamente 6 ingresos
+dpois(x = 6, lambda = 4)
+
+# P(X <= 2): a lo sumo 2 ingresos (guardia tranquila)
+ppois(q = 2, lambda = 4)
+
+# P(X >= 7): 7 o más ingresos (turno muy ocupado)
+1 - ppois(q = 6, lambda = 4)
+
+# Percentil 95: valor que no se supera el 95% del tiempo
+qpois(p = 0.95, lambda = 4)
+```
+
+## Visualización: Comparación de distribuciones Poisson
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 7.2
+#| fig-width: 12
+
+lambdas <- c(1, 3, 6)
+x_range <- 0:15
+
+df_poi <- purrr::map_dfr(lambdas, function(l) {
+  data.frame(x = x_range,
+             prob = dpois(x_range, lambda = l),
+             lambda = paste0("λ = ", l))
+})
+
+ggplot(df_poi, aes(x = factor(x), y = prob, fill = lambda)) +
+  geom_col(position = "dodge", color = "white",
+           width = 0.7, alpha = 0.85) +
+  scale_fill_manual(values = c("#42A5F5", "#1565C0", "#0D47A1"),
+                    name = "Tasa media\npor hora") +
+  scale_y_continuous(labels = function(x) paste0(round(x * 100, 0), "%")) +
+  theme_minimal(base_size = 12) +
+  labs(x = "Número de ingresos (X)",
+       y = "P(X = x)",
+       title = "Distribución de Poisson para distintas tasas de ingreso a urgencias") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        legend.position = "right")
+```
+
+# DISTRIBUCIONES CONTINUAS {background-color="#0077b6"}
+
+## Distribución Normal
+
+### Definición
+
+La distribución **Normal** (o gaussiana) es la distribución continua más importante en estadística. Una variable $X$ sigue una distribución Normal con media $\mu$ y varianza $\sigma^2$:
+
+$$X \sim N(\mu, \sigma^2)$$
+
+::: {.fragment}
+
+### Función de densidad
+
+$$\boxed{f(x) = \frac{1}{\sigma\sqrt{2\pi}}\; e^{-\frac{(x-\mu)^2}{2\sigma^2}}, \quad x \in \mathbb{R}}$$
+
+:::
+
+## Propiedades de la Distribución Normal
+
+::: columns
+
+::: {.column width="55%"}
+
+- **Simétrica** respecto a $\mu$
+- **Unimodal** con moda = mediana = $\mu$
+- La curva es asintótica al eje X
+- $E[X] = \mu$, $Var(X) = \sigma^2$
+- El parámetro $\sigma$ controla la **dispersión**
+
+:::
+
+::: {.column width="45%"}
+
+```{r}
+#| echo: false
+#| fig-height: 5.5
+#| fig-width: 5
+
+x_n <- seq(50, 150, length.out = 500)
+df_norms <- data.frame(
+  x    = rep(x_n, 3),
+  fx   = c(dnorm(x_n, 100, 5),
+           dnorm(x_n, 100, 10),
+           dnorm(x_n, 100, 20)),
+  sigma = rep(c("σ = 5", "σ = 10", "σ = 20"), each = 500)
+)
+
+ggplot(df_norms, aes(x, fx, color = sigma)) +
+  geom_line(linewidth = 1.5) +
+  scale_color_manual(values = c("#0D47A1","#1565C0","#90CAF9"),
+                     name = "") +
+  theme_minimal(base_size = 11) +
+  labs(x = "x", y = "f(x)",
+       title = "Normal: efecto de σ (μ = 100)") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        legend.position = "top",
+        panel.grid.minor = element_blank())
+```
+
+:::
+
+:::
+
+## Regla 68 — 95 — 99.7
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 4.5
+#| fig-width: 10
+
+mu_n <- 0; sd_n <- 1
+xv <- seq(-3.8, 3.8, length.out = 600)
+fv <- dnorm(xv, mu_n, sd_n)
+df_nn <- data.frame(x = xv, fx = fv)
+
+shade_region <- function(lo, hi, color, alpha = 0.5) {
+  xs <- xv[xv >= lo & xv <= hi]
+  fxs <- dnorm(xs, mu_n, sd_n)
+  geom_area(data = data.frame(x = xs, fx = fxs),
+            aes(x = x, y = fx), fill = color, alpha = alpha)
+}
+
+ggplot(df_nn, aes(x, fx)) +
+  shade_region(-3, 3,  "#BBDEFB", 0.5) +
+  shade_region(-2, 2,  "#64B5F6", 0.5) +
+  shade_region(-1, 1,  "#1565C0", 0.6) +
+  geom_line(linewidth = 1.8, color = "#0D47A1") +
+  geom_vline(xintercept = c(-1,1), linetype="dashed",
+             color="#1565C0", linewidth=0.8) +
+  geom_vline(xintercept = c(-2,2), linetype="dashed",
+             color="#42A5F5", linewidth=0.8) +
+  geom_vline(xintercept = c(-3,3), linetype="dashed",
+             color="#90CAF9", linewidth=0.8) +
+  annotate("text", x=0, y=0.17, label="68%", size=5,
+           fontface="bold", color="white") +
+  annotate("text", x=0, y=0.08, label="95%", size=4.5,
+           fontface="bold", color="#1565C0") +
+  annotate("text", x=0, y=0.03, label="99.7%", size=4,
+           fontface="bold", color="#42A5F5") +
+  annotate("text", x=c(-1,1), y=-0.018,
+           label=c("μ-σ","μ+σ"), size=3.8) +
+  annotate("text", x=c(-2,2), y=-0.018,
+           label=c("μ-2σ","μ+2σ"), size=3.8) +
+  scale_y_continuous(limits=c(-0.025, 0.44)) +
+  theme_minimal(base_size=12) +
+  labs(x="", y="", title="Regla empírica: distribución Normal") +
+  theme(plot.title=element_text(hjust=0.5, face="bold"),
+        panel.grid=element_blank(),
+        axis.text.y=element_blank())
+```
+
+$$P(\mu - \sigma \leq X \leq \mu + \sigma) \approx 0.68 \qquad P(\mu - 2\sigma \leq X \leq \mu + 2\sigma) \approx 0.95$$
+
+## Ejemplo: Presión Arterial Sistólica
+
+La **presión arterial sistólica** (PAS) en adultos sanos sigue una distribución aproximadamente normal:
+
+$$PAS \sim N(120,\; 15^2) \text{ mmHg}$$
+
+::: {.fragment}
+
+**¿Qué proporción de adultos tiene PAS entre 105 y 135 mmHg?**
+
+$$P(105 \leq PAS \leq 135) = P(120 - 15 \leq PAS \leq 120 + 15) \approx 0.68$$
+
+:::
+
+::: {.fragment}
+
+**¿Cuál es la probabilidad de que un adulto sea hipertenso (PAS > 140)?**
+
+$$P(PAS > 140) = 1 - P(PAS \leq 140)$$
+
+*Usaremos `pnorm` en R para calcularlo.*
+
+:::
+
+## Código R: Distribución Normal
+
+```{r}
+#| echo: true
+#| eval: true
+
+# PAS ~ N(120, 15^2) mmHg
+
+# P(PAS < 130): paciente con PAS por debajo de 130
+pnorm(q = 130, mean = 120, sd = 15)
+
+# P(PAS > 140): paciente hipertenso (PAS > 140)
+1 - pnorm(q = 140, mean = 120, sd = 15)
+
+# P(105 < PAS < 135): rango normal ± 1 desv. estándar
+pnorm(135, 120, 15) - pnorm(105, 120, 15)
+
+# Percentil 95 de la PAS (valor de corte)
+qnorm(p = 0.95, mean = 120, sd = 15)
+```
+
+## Distribución Normal Estándar
+
+### Estandarización
+
+Si $X \sim N(\mu, \sigma^2)$, la variable **estandarizada** sigue una Normal Estándar:
+
+$$\boxed{Z = \frac{X - \mu}{\sigma} \sim N(0, 1)}$$
+
+::: {.fragment}
+
+> La estandarización permite comparar valores de **diferentes escalas** y usar una única tabla (o función R).
+
+:::
+
+::: {.fragment}
+
+### Propiedades de $Z \sim N(0,1)$
+
+- $E[Z] = 0$, $Var(Z) = 1$
+- $f(z) = \dfrac{1}{\sqrt{2\pi}} e^{-z^2/2}$
+- Simétrica: $P(Z \leq -z) = P(Z \geq z) = 1 - \Phi(z)$
+
+:::
+
+## Cuantiles y Percentiles
+
+La función $\Phi(z) = P(Z \leq z)$ se implementa con `pnorm` en R.
+
+::: columns
+
+::: {.column width="55%"}
+
+### Valores críticos más usados
+
+| Nivel | $z_{\alpha/2}$ |
+|:---:|:---:|
+| 90% | $z_{0.05} = 1.645$ |
+| 95% | $z_{0.025} = 1.960$ |
+| 99% | $z_{0.005} = 2.576$ |
+
+:::
+
+::: {.column width="45%"}
+
+### En R
+
+```{r}
+#| echo: true
+#| eval: true
+# Percentil 97.5
+qnorm(0.975)
+# Percentil 99.5
+qnorm(0.995)
+# P(Z < 1.96)
+pnorm(1.96)
+```
+
+:::
+
+:::
+
+## Código R: Normal Estándar y Estandarización
+
+```{r}
+#| echo: true
+#| eval: true
+
+# P(-1.96 < Z < 1.96)
+pnorm(1.96) - pnorm(-1.96)
+
+# Estandarizar: PAS = 145 mmHg (mu=120, sigma=15)
+z <- (145 - 120) / 15
+cat("Z =", round(z, 3))
+cat("\nP(PAS > 145) = P(Z >", round(z, 3), ") =",
+    round(1 - pnorm(z), 4))
+
+# Intervalo de referencia clínica al 95%
+cat("\nIC 95%: [",
+    round(qnorm(0.025, 120, 15), 1), ",",
+    round(qnorm(0.975, 120, 15), 1), "] mmHg")
+```
+
+## Ejemplo completo: Glucemia en ayunas
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 4.5
+#| fig-width: 10
+
+xg <- seq(60, 180, length.out = 500)
+fg <- dnorm(xg, mean = 100, sd = 15)
+df_gluc <- data.frame(x = xg, fx = fg)
+
+df_shd <- df_gluc[df_gluc$x <= 126, ]
+df_dm  <- df_gluc[df_gluc$x > 126, ]
+
+ggplot(df_gluc, aes(x, fx)) +
+  geom_area(data = df_shd, aes(x, fx), fill = "#A5D6A7", alpha = 0.7) +
+  geom_area(data = df_dm,  aes(x, fx), fill = "#EF9A9A", alpha = 0.7) +
+  geom_line(linewidth = 1.8, color = "#1565C0") +
+  geom_vline(xintercept = 126, linetype = "dashed",
+             color = "#C62828", linewidth = 1.2) +
+  annotate("text", x = 95, y = 0.012, label = "Normal\n(Gluc < 126)",
+           size = 4.5, fontface = "bold", color = "#2E7D32") +
+  annotate("text", x = 145, y = 0.006, label = "Diabetes\n(Gluc ≥ 126)",
+           size = 4.5, fontface = "bold", color = "#C62828") +
+  annotate("text", x = 128, y = 0.027, label = "126 mg/dL",
+           size = 4, color = "#C62828", fontface = "italic") +
+  theme_minimal(base_size = 13) +
+  labs(x = "Glucemia en ayunas (mg/dL)",
+       y = "Densidad f(x)",
+       title = "Glucemia ~ N(100, 15²)",
+       subtitle = paste0("P(Glucemia ≥ 126) = ",
+                         round(1 - pnorm(126, 100, 15), 4))) +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, color = "#C62828"),
+        panel.grid.minor = element_blank())
+```
+
+---
+
+### Código R del ejemplo glucemia
+
+```{r}
+#| echo: true
+#| eval: true
+
+# Glucemia en ayunas ~ N(100, 15^2) mg/dL
+
+# P(Glucemia >= 126): probabilidad de diagnóstico de diabetes
+1 - pnorm(q = 126, mean = 100, sd = 15)
+
+# Valor de corte para prediabetes (percentil 80)
+qnorm(p = 0.80, mean = 100, sd = 15)
+
+# Simular 500 pacientes y contar cuántos superan 126
+set.seed(2024)
+glucemia <- rnorm(n = 500, mean = 100, sd = 15)
+mean(glucemia >= 126)
+```
