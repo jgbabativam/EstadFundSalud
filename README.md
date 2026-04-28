@@ -86,7 +86,7 @@ El curso se organiza en cinco unidades temáticas:
 | :--- | :--- | :--- |
 | Bienvenida | - | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/0.Bienvenida.html) |
 | Introducción | [Lectura 1](https://github.com/jgbabativam/EstadFundSalud/blob/main/lecturas/1Dialnet-ApreciacionesSobreElUsoYAplicacionDeLaEstadisticaE-4730381.pdf) | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/1.Intro.html) |
-| Probabilidad | [Ejercicios 1](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/1Probabilidad.pdf) <br> [Ejercicios 2](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/2Probabilidad.pdf)| [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/2.Probabilidad.html) |
+| Probabilidad | [Ejercicios 1](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/1Probabilidad.pdf) <br> [Ejercicios 2](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/2Probabilidad.pdf) <br> [Respuestas Ej.2](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/RespuestasT2.pdf) | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/2.Probabilidad.html) |
 | Variables aleatorias y <br> distribuciones de probabilidad | [Ejercicios 3](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/3VariablesAleatorias.pdf)| [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/3.VariablesAleatorias.html) |
 
 
