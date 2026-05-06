@@ -1033,7 +1033,7 @@ pnorm(135, 120, 15) - pnorm(105, 120, 15)
 qnorm(p = 0.95, mean = 120, sd = 15)
 ```
 
-## Distribución Normal Estándar
+## Distribución Normal Estándar {style="font-size: 85%;"}
 
 ### Estandarización
 
@@ -1067,6 +1067,8 @@ La función $\Phi(z) = P(Z \leq z)$ se implementa con `pnorm` en R.
 
 ### Valores críticos más usados
 
+</br>
+
 | Nivel | $z_{\alpha/2}$ |
 |:---:|:---:|
 | 90% | $z_{0.05} = 1.645$ |
@@ -1096,6 +1098,7 @@ pnorm(1.96)
 
 ## Código R: Normal Estándar y Estandarización
 
+
 ```{r}
 #| echo: true
 #| eval: true
@@ -1120,8 +1123,8 @@ cat("\nIC 95%: [",
 ```{r}
 #| echo: false
 #| fig-align: center
-#| fig-height: 4.5
-#| fig-width: 10
+#| fig-height: 6.5
+#| fig-width: 11
 
 xg <- seq(60, 180, length.out = 500)
 fg <- dnorm(xg, mean = 100, sd = 15)
@@ -1174,3 +1177,14 @@ set.seed(2024)
 glucemia <- rnorm(n = 500, mean = 100, sd = 15)
 mean(glucemia >= 126)
 ```
+
+# GRACIAS! {background-color="#ddf3ff"}
+
+
+# Citación y derechos de autor
+
+Este material ha sido creado por [Giovany Babativa-Márquez](https://github.com/jgbabativam) y es de libre distribución bajo la licencia [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+Cualquier copia parcial o total de este material, debe citar la fuente como:
+
+> Babativa-Márquez, J.G. *Diapositivas del curso de Estadística Fundamental para Ciencias de la Salud*. URL: https://jgbabativam.github.io/EstadFundSalud/
