@@ -3,7 +3,8 @@
 Repositorio con materiales académicos del curso **Estadística Fundamental para Ciencias de la Salud**, incluyendo diapositivas, guías, recursos en R y contenidos de apoyo para el aprendizaje de conceptos estadísticos aplicados al campo de la salud.
 
 
-
+🌐 **Página web del curso:**\
+https://jgbabativam.github.io/EstadFundSalud/
 ---
 
 
@@ -73,9 +74,20 @@ El curso se organiza en cinco unidades temáticas:
 * Interpretación de resultados
 
 
-
 ---
 
+## 💻 Software utilizado
+
+El curso incorpora el uso de tecnologías de la información y la comunicación (TIC), especialmente el software **R**, para la realización de análisis estadísticos y procedimientos computacionales.
+
+### Instalación
+
+Video guía de instalación:
+
+-   Instalación de R\
+    https://youtu.be/TKplIIwwdEk
+
+---
 
 
 📚 Material del curso
@@ -88,13 +100,9 @@ El curso se organiza en cinco unidades temáticas:
 | Introducción | [Lectura 1](https://github.com/jgbabativam/EstadFundSalud/blob/main/lecturas/1Dialnet-ApreciacionesSobreElUsoYAplicacionDeLaEstadisticaE-4730381.pdf) | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/1.Intro.html) |
 | Probabilidad | [Ejercicios 1](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/1Probabilidad.pdf) <br> [Ejercicios 2](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/2Probabilidad.pdf) <br> [Respuestas Ej.2](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/RespuestasT2.pdf) <br> [Respuestas P.1](https://github.com/jgbabativam/EstadFundSalud/blob/main/docs/Rtas_P1.pdf) <br> [Notas G1](https://github.com/jgbabativam/EstadFundSalud/blob/main/docs/NOTAS_EFCS1.xlsx)| [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/2.Probabilidad.html) |
 | Variables aleatorias y <br> distribuciones de probabilidad | [Ejercicios 3](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/3VariablesAleatorias.pdf) <br> [Respuestas Ej.3](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/RespuestasT3.pdf)| [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/3.VariablesAleatorias.html) |
-| Medidas Descriptivas | | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/4.Descriptiva.html) |
+| Medidas Descriptivas | [Ejercicios 4](https://github.com/jgbabativam/EstadFundSalud/blob/main/Talleres/4Descriptiva.pdf) | [Ver diapositivas](https://jgbabativam.github.io/EstadFundSalud/4.Descriptiva.html) |
 
 
-
-## 💻 Herramientas
-
-El curso incorpora el uso de tecnologías de la información y la comunicación (TIC), especialmente el software **R**, para la realización de análisis estadísticos y procedimientos computacionales.
 
 ## 📦 Contenido del repositorio
 
