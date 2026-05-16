@@ -1,0 +1,1556 @@
+---
+title: "Estadística Fundamental para Ciencias de la Salud"
+subtitle: "Estadística Descriptiva"
+author:
+    name: Giovany Babativa-Márquez, PhD
+    email: jgbabativam@unal.edu.co
+format:
+  gbabativa-revealjs:
+    logo: "images/UNAL.png"
+incremental: false
+embed-resources: true
+highlight-style: dracula
+execute:
+  echo: false
+  eval: true
+filters:
+  - webr
+revealjs-plugins:
+  - drop
+---
+
+```{r}
+library(pacman)
+p_load(here, ggplot2, dplyr, tidyr, skimr)
+```
+
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+# POBLACIÓN Y MUESTRA {background-color="#0077b6"}
+
+## ¿A quién queremos estudiar? {style="font-size: 90%;"}
+
+::: columns
+
+::: {.column width="50%"}
+
+### Población
+
+Conjunto **completo** de individuos que comparten una característica de interés.
+
+**Ejemplos:**
+- Todos los pacientes con EPOC en Colombia
+- Todos los adultos mayores de un municipio
+- Todas las personas hospitalizadas por fractura de cadera en 2024
+
+:::
+
+::: {.column width="50%"}
+
+### Muestra
+
+**Subconjunto** de la población, seleccionado para ser estudiado.
+
+**Ejemplos:**
+- 300 pacientes con EPOC atendidos en tres IPS
+- 80 adultos mayores del programa de rehabilitación
+- 50 pacientes hospitalizados por fractura de cadera
+
+:::
+
+:::
+
+::: {.fragment}
+
+::: {.callout-tip}
+Trabajamos con muestras por razones de **costo, tiempo y factibilidad**. El objetivo es que la muestra sea **representativa** de la población.
+:::
+
+:::
+
+## Parámetros y Estadísticos {style="font-size: 85%;"}
+
+::: columns
+
+::: {.column width="50%"}
+
+### Parámetro
+
+Valor que describe una **característica de la población**. Se denota con letras griegas.
+
+| Característica | Símbolo |
+|----------------|:-------:|
+| Media | $\mu$ |
+| Desviación estándar | $\sigma$ |
+| Proporción | $p$ |
+
+:::
+
+::: {.column width="50%"}
+
+### Estadístico
+
+Valor calculado a partir de la **muestra**. Estima el parámetro poblacional a partir de los valores de la muestra.
+
+| Característica | Símbolo |
+|----------------|:-------:|
+| Media muestral | $\bar{x}$ |
+| Desv. estándar muestral | $s$ |
+| Proporción muestral | $\hat{p}$ |
+
+:::
+
+:::
+
+::: {.fragment}
+
+> Usamos los **estadísticos** (muestra) para **estimar** los **parámetros** (población). Esta inferencia es el objetivo del análisis estadístico en salud.
+
+:::
+
+## Escala de medición y estadísticos apropiados
+
+<div style="font-size:0.78em; line-height:1.8;">
+
+| Escala | Tipo de variable | Tendencia central | Dispersión | Posición |
+|--------|:----------------:|:-----------------:|:----------:|:--------:|
+| Nominal | Cualitativa | Moda | — | — |
+| Ordinal | Cualitativa | Moda, Mediana | RIC | Percentiles |
+| Intervalo | Cuantitativa | Media, Mediana | $s$, $s^2$ | Percentiles |
+| Razón | Cuantitativa | Media, Mediana | $s$, $s^2$, CV | Percentiles |
+
+</div>
+
+::: {.fragment}
+
+::: {.callout-note}
+**Regla fundamental:** no calcule la media de variables ordinales. Si el dolor se mide como *leve / moderado / severo*, la media carece de sentido clínico; use la mediana o los percentiles.
+:::
+
+:::
+
+# MEDIDAS DE TENDENCIA CENTRAL {background-color="#0077b6"}
+
+## ¿Qué es la tendencia central?
+
+Las medidas de tendencia central indican el **valor representativo** o típico de un conjunto de datos.
+
+</br>
+
+::: columns
+
+::: {.column width="33%"}
+
+### Media $\bar{x}$
+Promedio aritmético. Sensible a valores extremos.
+
+:::
+
+::: {.column width="33%"}
+
+### Mediana $\tilde{x}$
+Valor que divide los datos por la mitad. Resistente a atípicos.
+
+:::
+
+::: {.column width="33%"}
+
+### Moda $\hat{x}$
+Valor más frecuente. Usable en cualquier escala.
+
+:::
+
+:::
+
+## Media aritmética {style="font-size: 90%;"}
+
+### Definición
+
+$$\boxed{\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i = \frac{x_1 + x_2 + \cdots + x_n}{n}}$$
+
+::: {.fragment}
+
+### Ejemplo: Días de hospitalización (8 pacientes post-cirugía de rodilla)
+
+$$4, \; 6, \; 5, \; 8, \; 7, \; 5, \; 9, \; 6$$
+
+$$\bar{x} = \frac{4+6+5+8+7+5+9+6}{8} = \frac{50}{8} = \mathbf{6.25 \text{ días}}$$
+
+:::
+
+::: {.fragment}
+
+**Interpretación:** En promedio, los pacientes estuvieron hospitalizados **6.25 días** tras la cirugía de rodilla.
+
+:::
+
+## Mediana {style="font-size: 90%;"}
+
+### Definición
+
+La **mediana** es el valor central cuando los datos están ordenados de menor a mayor.
+
+::: columns
+
+::: {.column width="50%"}
+
+**$n$ impar:**
+$$\tilde{x} = x_{\left(\frac{n+1}{2}\right)}$$
+
+:::
+
+::: {.column width="50%"}
+
+**$n$ par:**
+$$\tilde{x} = \frac{x_{\left(\frac{n}{2}\right)} + x_{\left(\frac{n}{2}+1\right)}}{2}$$
+
+:::
+
+:::
+
+::: {.fragment}
+
+### Ejemplo: Días de hospitalización
+
+Datos ordenados: $4, \; 5, \; 5, \; \mathbf{6}, \; \mathbf{6}, \; 7, \; 8, \; 9$
+
+$$\tilde{x} = \frac{x_{(4)} + x_{(5)}}{2} = \frac{6 + 6}{2} = \mathbf{6 \text{ días}}$$
+
+:::
+
+## Moda {style="font-size: 78%;"}
+
+### Definición
+
+La **moda** es el valor que aparece con **mayor frecuencia**. Un conjunto puede ser unimodal, bimodal o multimodal.
+
+::: {.fragment}
+
+### Ejemplo 1: Días de hospitalización
+
+$$4, \; \mathbf{5, \; 5}, \; \mathbf{6, \; 6}, \; 7, \; 8, \; 9$$
+
+$\hat{x} = 5$ y $\hat{x} = 6$ → distribución **bimodal**
+
+:::
+
+::: {.fragment}
+
+### Ejemplo 2: Escala EVA de dolor al ingreso (10 pacientes)
+
+$$0, \; 1, \; \mathbf{3, \; 3, \; 3}, \; 4, \; 5, \; 5, \; 6, \; 7 \qquad \hat{x} = 3$$
+
+El dolor leve-moderado es la puntuación de entrada más frecuente.
+
+:::
+
+::: {.fragment}
+
+### Ejemplo 3: Grupo sanguíneo (50 pacientes)
+
+$$O^+: 22 \quad A^+: 15 \quad B^+: 8 \quad AB^+: 5 \qquad \hat{x} = O^+$$
+
+Variable nominal: la moda es la **única** medida de tendencia central válida.
+
+:::
+
+## ¿Cuándo usar cada medida?
+
+<div style="font-size:0.78em; line-height:1.8;">
+
+| Situación | Medida recomendada | Justificación |
+|:----------|:------------------:|:------|
+| Variable nominal (diagnóstico, grupo sanguíneo) | Moda | Única opción válida |
+| Variable ordinal (dolor, nivel de dependencia) | Mediana | Escala sin aritmética real |
+| Cuantitativa, distribución simétrica, sin atípicos | Media | Usa toda la información |
+| Cuantitativa con datos atípicos | Mediana | Resistente a extremos |
+| Cuantitativa con distribución muy asimétrica | Mediana | Más representativa |
+
+: {tbl-colwidths="[40,20, 40]"}
+
+</div>
+
+## Efecto de los datos atípicos sobre la media {style="font-size: 80%;"}
+
+### Ejemplo: Tiempo de espera en urgencias (8 pacientes, minutos)
+
+$$10, \; 15, \; 18, \; 20, \; 25, \; 28, \; 32, \; \mathbf{65}$$
+
+::: {.fragment}
+
+**Sin el dato extremo (65 min):**
+
+$$\bar{x} = \frac{10+15+18+20+25+28+32}{7} = \frac{148}{7} \approx 21.1 \text{ min}$$
+
+:::
+
+::: {.fragment}
+
+**Con el dato extremo (65 min):**
+
+$$\bar{x} = \frac{148 + 65}{8} = \frac{213}{8} \approx 26.6 \text{ min}$$
+
+:::
+
+::: {.fragment}
+
+**Mediana (con los 8 datos):** $\tilde{x} = \dfrac{20+25}{2} = 22.5$ min → **no se afecta**
+
+> La media se desplazó **5.5 minutos** por un solo caso extremo. La mediana permanece estable.
+
+:::
+
+## Media vs Mediana: Forma de la distribución {style="font-size: 90%;"}
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 5.2
+#| fig-width: 12
+
+set.seed(7)
+sim_sym  <- rnorm(300, mean = 72, sd = 8)
+sim_skew <- c(rnorm(270, mean = 18, sd = 3), rexp(30, rate = 0.06) + 30)
+
+df_shapes <- bind_rows(
+  data.frame(x = sim_sym,  dist = "Simétrica\n(presión diastólica, mmHg)"),
+  data.frame(x = sim_skew, dist = "Asimétrica positiva\n(tiempo de espera, min)")
+)
+
+df_stats <- df_shapes |>
+  group_by(dist) |>
+  summarise(media   = mean(x),
+            mediana = median(x))
+
+ggplot(df_shapes, aes(x = x)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30,
+                 fill = "#90CAF9", color = "white", alpha = 0.8) +
+  geom_density(color = "#1565C0", linewidth = 1.4) +
+  geom_vline(data = df_stats, aes(xintercept = media,   color = "Media"),
+             linewidth = 1.3, linetype = "dashed") +
+  geom_vline(data = df_stats, aes(xintercept = mediana, color = "Mediana"),
+             linewidth = 1.3, linetype = "solid") +
+  scale_color_manual(values = c("Media" = "#C62828", "Mediana" = "#2E7D32"),
+                     name = "") +
+  facet_wrap(~dist, scales = "free") +
+  theme_minimal(base_size = 13) +
+  labs(x = "", y = "Densidad",
+       title = "Simétrica: media ≈ mediana  |  Asimétrica positiva: media > mediana") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold", size = 12),
+        legend.position = "top",
+        panel.grid.minor = element_blank())
+```
+
+::: {.fragment}
+En distribuciones con **cola larga a la derecha**, la media es mayor que la mediana porque queda "jalada" hacia los valores extremos. El tiempo de espera, los días de estancia y los costos hospitalarios suelen tener esta forma.
+:::
+
+## Código R: Tendencia central
+
+</br>
+
+```{r}
+#| echo: true
+#| eval: true
+
+# Días de hospitalización (8 pacientes)
+dias <- c(4, 6, 5, 8, 7, 5, 9, 6)
+
+mean(dias)       # media
+median(dias)     # mediana
+
+# La moda no tiene función nativa en R
+# La identificamos con la tabla de frecuencias:
+table(dias)
+```
+
+# MEDIDAS DE DISPERSIÓN {background-color="#0077b6"}
+
+## ¿Por qué medir la dispersión? {style="font-size: 90%;"}
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 4.8
+#| fig-width: 11
+
+df_disp <- bind_rows(
+  data.frame(fc = c(68, 70, 72, 74, 76), grupo = "Grupo A — Estable"),
+  data.frame(fc = c(50, 62, 72, 82, 94), grupo = "Grupo B — Variable")
+)
+
+ggplot(df_disp, aes(x = fc, y = grupo, color = grupo)) +
+  geom_point(size = 7, alpha = 0.85) +
+  geom_vline(xintercept = 72, linetype = "dashed", color = "#C62828",
+             linewidth = 1.2) +
+  annotate("text", x = 73.5, y = 2.42,
+           label = "Media = 72 lpm",
+           color = "#C62828", size = 4.5, fontface = "italic") +
+  scale_color_manual(values = c("#1565C0", "#2E7D32"), guide = "none") +
+  scale_x_continuous(limits = c(40, 100),
+                     breaks = seq(40, 100, by = 10)) +
+  theme_minimal(base_size = 14) +
+  labs(x = "Frecuencia cardíaca (lpm)", y = "",
+       title = "Misma media, diferente dispersión") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank())
+```
+
+::: {.fragment}
+La **media sola no es suficiente**. Un paciente del Grupo A oscila entre 68 y 76 lpm (estable); uno del Grupo B entre 50 y 94 lpm (alarmante). Sin medir la dispersión, esta diferencia clínica queda oculta.
+:::
+
+## Rango
+
+### Definición
+
+$$\boxed{R = x_{\max} - x_{\min}}$$
+
+::: {.fragment}
+
+### Ejemplo: Días de hospitalización
+
+$$4, \; 5, \; 5, \; 6, \; 6, \; 7, \; 8, \; 9$$
+
+$$R = 9 - 4 = \mathbf{5 \text{ días}}$$
+
+:::
+
+::: {.fragment}
+
+::: {.callout-note}
+El rango es muy **sensible a valores extremos**, un solo dato atípico lo infla completamente. Es una medida preliminar; siempre complemente con la desviación estándar o el RIC.
+:::
+
+:::
+
+## Varianza y Desviación Estándar {style="font-size: 90%;"}
+
+### Definiciones
+
+$$\boxed{s^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2}$$
+
+$$\boxed{s = \sqrt{s^2}}$$
+
+::: {.fragment}
+
+El divisor es $n-1$ (no $n$) porque usamos la muestra para **estimar** la varianza poblacional, esto es lo que corrige el sesgo.
+
+:::
+
+::: {.fragment}
+
+> La desviación estándar $s$ está en las **mismas unidades** que los datos originales, lo que facilita la interpretación clínica.
+
+:::
+
+## Cálculo: Varianza y Desviación Estándar {style="font-size: 88%;"}
+
+### Escala EVA de dolor al inicio de fisioterapia (8 pacientes)
+
+$$3, \; 5, \; 4, \; 6, \; 5, \; 7, \; 4, \; 6 \qquad \bar{x} = \frac{40}{8} = 5$$
+
+::: {.fragment style="font-size: 0.65em;"}
+
+| $x_i$ | $x_i - \bar{x}$ | $(x_i - \bar{x})^2$ |
+|:-----:|:---------------:|:-------------------:|
+| 3 | $-2$ | 4 |
+| 5 | $0$ | 0 |
+| 4 | $-1$ | 1 |
+| 6 | $+1$ | 1 |
+| 5 | $0$ | 0 |
+| 7 | $+2$ | 4 |
+| 4 | $-1$ | 1 |
+| 6 | $+1$ | 1 |
+| **Total** | | **12** |
+
+:::
+
+::: {.fragment}
+
+$$s^2 = \frac{12}{8-1} = \frac{12}{7} \approx 1.71 \quad \Rightarrow \quad s = \sqrt{1.71} \approx \mathbf{1.31 \text{ puntos EVA}}$$
+
+:::
+
+## Interpretación de la Desviación Estándar {style="font-size: 90%;"}
+
+::: {.callout-tip}
+**Regla práctica:** en distribuciones aproximadamente simétricas, alrededor del 95% de los datos cae en el intervalo $[\bar{x} - 2s, \;\bar{x} + 2s]$.
+:::
+
+::: {.fragment}
+
+**Ejemplo EVA:** $\bar{x} = 5$, $s = 1.31$
+
+$$[\bar{x} - 2s, \;\bar{x} + 2s] = [5 - 2.62, \;5 + 2.62] = [2.38, \;7.62]$$
+
+La mayoría de los pacientes tendrá una puntuación EVA entre **2.4 y 7.6** al inicio del tratamiento.
+
+:::
+
+::: {.fragment}
+
+Un paciente con EVA = 9 quedaría **fuera de ese rango** → podría ser un caso que requiere atención especial antes de iniciar el protocolo habitual.
+
+:::
+
+## Coeficiente de Variación (CV) {style="font-size: 83%;"}
+
+$$\boxed{CV = \frac{s}{\bar{x}} \times 100\%}$$
+
+> Expresa la desviación estándar **como porcentaje de la media**. Permite comparar variabilidades entre variables en **diferentes unidades**.
+
+::: {.fragment}
+
+### Ejemplo clínico
+
+Variabilidad de dos signos vitales en 20 pacientes:
+
+| Variable | $\bar{x}$ | $s$ | $CV$ | Interpretación |
+|----------|:---------:|:---:|:----:|:---------------|
+| Frecuencia cardíaca (lpm) | 74 | 9.2 | **12.4%** | Alta variabilidad |
+| Temperatura corporal (°C) | 36.8 | 0.4 | **1.1%** | Muy estable |
+
+:::
+
+::: {.fragment}
+
+**Conclusión:** La FC es mucho más variable (12.4%) que la temperatura (1.1%), lo cual es fisiológicamente esperable. El CV permite esta comparación aunque las unidades sean completamente distintas.
+
+:::
+
+## Código R: Dispersión
+
+</br>
+
+```{r}
+#| echo: true
+#| eval: true
+
+# Escala EVA de dolor (8 pacientes)
+eva <- c(3, 5, 4, 6, 5, 7, 4, 6)
+
+var(eva)                         # varianza
+sd(eva)                          # desviación estándar
+sd(eva) / mean(eva) * 100        # coeficiente de variación (%)
+range(eva)                       # mínimo y máximo
+diff(range(eva))                 # rango
+```
+
+# MEDIDAS DE POSICIÓN {background-color="#0077b6"}
+
+## Percentiles {style="font-size: 90%;"}
+
+### Definición
+
+El **percentil $k$** ($P_k$) es el valor por debajo del cual se encuentra el $k\%$ de las observaciones.
+
+::: {.fragment}
+
+### Ejemplos en salud
+
+| Percentil | Aplicación clínica |
+|:---------:|:-------------------|
+| $P_{50}$ | Mediana: 50% de valores por debajo |
+| $P_{25}$ | Primer cuartil (Q1) |
+| $P_{75}$ | Tercer cuartil (Q3) |
+| $P_{90}$ | Curvas de crecimiento pediátrico: 90% de niños pesa menos |
+| $P_{95}$ | Punto de corte para HTA en pediatría (PAS > P95) |
+| $P_{97}$ | Límite superior en valores de referencia de laboratorio |
+
+:::
+
+## Cuartiles y Rango Intercuartílico {style="font-size: 90%;"}
+
+Los **cuartiles** son los percentiles 25, 50 y 75. Dividen los datos en cuatro partes iguales.
+
+::: columns
+
+::: {.column width="58%"}
+
+- $Q_1 = P_{25}$: 25% de los datos es menor
+- $Q_2 = P_{50}$: mediana
+- $Q_3 = P_{75}$: 75% de los datos es menor
+
+$$\boxed{RIC = Q_3 - Q_1}$$
+
+El **Rango Intercuartílico (RIC)** mide la dispersión del **50% central** de los datos. Es resistente a valores atípicos.
+
+:::
+
+::: {.column width="42%"}
+
+```{r}
+#| echo: false
+#| fig-height: 5.2
+#| fig-width: 4.5
+
+set.seed(42)
+x_q <- sort(rnorm(60, 72, 12))
+q_vals <- quantile(x_q, probs = c(0.25, 0.5, 0.75))
+
+df_q <- data.frame(x = x_q, y = 1)
+
+ggplot(df_q, aes(x = x, y = y)) +
+  geom_jitter(height = 0.07, color = "#1565C0", alpha = 0.55, size = 2) +
+  geom_vline(xintercept = q_vals,
+             color = "#C62828",
+             linetype = c("solid", "dashed", "solid"),
+             linewidth = 1.3) +
+  annotate("text",
+           x    = q_vals + c(-4.5, 0, 4.5),
+           y    = c(1.19, 1.24, 1.19),
+           label = c("Q1", "Q2", "Q3"),
+           color = "#C62828", size = 4.5, fontface = "bold") +
+  scale_y_continuous(limits = c(0.82, 1.32)) +
+  theme_minimal(base_size = 12) +
+  labs(x = "Frecuencia cardíaca (lpm)", y = "",
+       title = "Cuartiles en\n60 pacientes") +
+  theme(axis.text.y      = element_blank(),
+        panel.grid.major.y = element_blank(),
+        plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+:::
+
+:::
+
+## Ejemplo: Tiempo de espera en urgencias (8 pacientes, minutos) {style="font-size: 80%;"}
+
+Datos ordenados: $10, \; 15, \; 18, \; 20, \; 25, \; 28, \; 32, \; 65$
+
+::: {.fragment}
+
+**Mediana ($Q_2$):**
+$$\tilde{x} = \frac{x_{(4)} + x_{(5)}}{2} = \frac{20 + 25}{2} = \mathbf{22.5} \text{ min}$$
+
+:::
+
+::: {.fragment}
+
+**$Q_1$:** mediana de la mitad inferior $\{10, 15, 18, 20\}$:
+$$Q_1 = \frac{15 + 18}{2} = \mathbf{16.5} \text{ min}$$
+
+**$Q_3$:** mediana de la mitad superior $\{25, 28, 32, 65\}$:
+$$Q_3 = \frac{28 + 32}{2} = \mathbf{30} \text{ min}$$
+
+:::
+
+::: {.fragment}
+
+$$RIC = 30 - 16.5 = \mathbf{13.5} \text{ min}$$
+
+El 50% central de los pacientes esperó entre **16.5 y 30 minutos**.
+
+:::
+
+## Diagrama de Caja (*Boxplot*)
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 5.2
+#| fig-width: 11
+
+espera_vec <- c(10, 15, 18, 20, 25, 28, 32, 65)
+df_bx <- data.frame(x = espera_vec, grupo = "Urgencias")
+
+qs <- quantile(espera_vec)
+med_v <- median(espera_vec)
+
+ggplot(df_bx, aes(x = grupo, y = x)) +
+  geom_boxplot(fill = "#90CAF9", color = "#1565C0",
+               outlier.color = "#C62828", outlier.size = 5,
+               width = 0.4, linewidth = 1.1) +
+  geom_jitter(width = 0.07, color = "#1565C0", alpha = 0.55, size = 3) +
+  annotate("text", x = 1.33, y = qs[2],
+           label = paste0("Q1 = ", qs[2]),
+           size = 4, color = "#1565C0", angle = 90) +
+  annotate("text", x = 1.33, y = med_v,
+           label = paste0("Mediana = ", med_v),
+           size = 4, color = "#1565C0") +
+  annotate("text", x = 1.33, y = qs[4],
+           label = paste0("Q3 = ", qs[4]),
+           size = 4, color = "#1565C0", angle = 90) +
+  annotate("text", x = 1.33, y = 65,
+           label = "Dato atípico: 65 min",
+           size = 4, color = "#C62828", fontface = "bold") +
+  coord_flip() +
+  theme_minimal(base_size = 13) +
+  labs(x = "", y = "Tiempo de espera (min)",
+       title = "Diagrama de caja — Tiempo de espera en urgencias") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank())
+```
+
+## Lectura del Diagrama de Caja {style="font-size: 85%;"}
+
+</br>
+
+::: columns
+
+::: {.column width="65%"}
+
+**Caja:** contiene el **50% central** de los datos (de Q1 a Q3).
+
+**Línea interna:** mediana ($Q_2$).
+
+**Bigotes:** se extienden hasta el valor más extremo que **no sea atípico** (dentro de las vallas de Tukey).
+
+**Puntos separados:** datos atípicos más allá de $Q_1 - 1.5 \times RIC$ o $Q_3 + 1.5 \times RIC$.
+
+:::
+
+::: {.column width="35%"}
+
+```{r}
+#| echo: false
+#| fig-height: 5.8
+#| fig-width: 4.8
+
+set.seed(11)
+df_bx2 <- data.frame(
+  y = c(rnorm(40, 75, 10), 120),
+  g = "Grupo"
+)
+
+ggplot(df_bx2, aes(x = g, y = y)) +
+  geom_boxplot(fill = "#90CAF9", color = "#1565C0",
+               outlier.color = "#C62828", outlier.size = 5,
+               width = 0.38, linewidth = 1.2) +
+  annotate("text", x = 1.30, y = median(df_bx2$y),
+           label = "Mediana", hjust = 0, size = 3.8, color = "#333333") +
+  annotate("text", x = 1.30, y = quantile(df_bx2$y, 0.25),
+           label = "Q1", hjust = 0, size = 3.8, color = "#333333") +
+  annotate("text", x = 1.30, y = quantile(df_bx2$y, 0.75),
+           label = "Q3", hjust = 0, size = 3.8, color = "#333333") +
+  annotate("text", x = 1.30, y = 120,
+           label = "Atípico", hjust = 0, size = 3.8,
+           color = "#C62828", fontface = "bold") +
+  annotate("segment",
+           x = 0.69, xend = 0.69,
+           y = quantile(df_bx2$y, 0.25),
+           yend = quantile(df_bx2$y, 0.75),
+           color = "#0077b6", linewidth = 2.5, alpha = 0.3) +
+  annotate("text", x = 0.55, y = 75, label = "RIC",
+           size = 3.5, color = "#0077b6", angle = 90) +
+  theme_minimal(base_size = 12) +
+  labs(x = "", y = "Valor",
+       title = "Partes del\ndiagrama de caja") +
+  theme(axis.text.x  = element_blank(),
+        plot.title   = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank())
+```
+
+:::
+
+:::
+
+## Código R: Cuantiles
+
+</br>
+
+```{r}
+#| echo: true
+#| eval: true
+
+# Tiempo de espera en urgencias (min)
+espera <- c(10, 15, 18, 20, 25, 28, 32, 65)
+
+# Resumen de cinco números
+quantile(espera)
+
+# Rango intercuartílico
+IQR(espera)
+
+# Resumen completo (media + cuantiles)
+summary(espera)
+```
+
+# DATOS ATÍPICOS {background-color="#0077b6"}
+
+## ¿Qué es un dato atípico? {style="font-size: 90%;"}
+
+Un **dato atípico** (*outlier*) es una observación que se aleja notablemente del patrón general de los datos.
+
+::: {.fragment}
+
+### Regla de la valla: criterio de Tukey
+
+$$\boxed{\text{Atípico si: } x < Q_1 - 1.5 \times RIC \quad \text{o} \quad x > Q_3 + 1.5 \times RIC}$$
+
+:::
+
+::: {.fragment}
+
+### Aplicación al ejemplo de urgencias
+
+$$Q_1 = 16.5, \quad Q_3 = 30, \quad RIC = 13.5$$
+
+$$\text{Valla superior} = 30 + 1.5 \times 13.5 = 30 + 20.25 = \mathbf{50.25} \text{ min}$$
+
+Como $65 > 50.25$ → el tiempo de **65 minutos es atípico** $\checkmark$
+
+:::
+
+## Impacto de los datos atípicos {style="font-size: 90%;"}
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 4.8
+#| fig-width: 11
+
+espera_v  <- c(10, 15, 18, 20, 25, 28, 32, 65)
+espera_sin <- espera_v[-8]
+
+df_impact <- bind_rows(
+  data.frame(x = espera_v,   grupo = "Con atípico (n = 8)"),
+  data.frame(x = espera_sin, grupo = "Sin atípico (n = 7)")
+)
+
+df_stats_i <- df_impact |>
+  group_by(grupo) |>
+  summarise(media = mean(x), mediana = median(x))
+
+ggplot(df_impact, aes(x = grupo, y = x)) +
+  geom_boxplot(fill = "#90CAF9", color = "#1565C0",
+               outlier.color = "#C62828", outlier.size = 4,
+               width = 0.42, linewidth = 1.1) +
+  geom_point(data = df_stats_i,
+             aes(x = grupo, y = media),
+             shape = 18, size = 6, color = "#C62828") +
+  geom_label(data = df_stats_i,
+             aes(x = grupo, y = media,
+                 label = paste0("Media = ", round(media, 1))),
+             nudge_x = 0.32, size = 3.9, color = "#C62828") +
+  geom_label(data = df_stats_i,
+             aes(x = grupo, y = mediana,
+                 label = paste0("Mediana = ", round(mediana, 1))),
+             nudge_x = -0.33, size = 3.9, color = "#2E7D32") +
+  theme_minimal(base_size = 13) +
+  labs(x = "", y = "Tiempo de espera (min)",
+       title = "Efecto del atípico sobre media (◆ rojo) y mediana (línea verde)") +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        panel.grid.minor = element_blank())
+```
+
+::: {.fragment}
+La **mediana** pasa de 22.5 a 20 (cambio leve). La **media** pasa de 26.6 a 21.1 (cambio importante). La mediana es más **robusta** frente a valores extremos.
+:::
+
+## ¿Qué hacer con los datos atípicos? {style="font-size: 75%;"}
+
+::: {.fragment}
+
+**1. Investigar, no eliminar automáticamente**
+
+- ¿Error de digitación? → Corregir o eliminar
+- ¿Caso clínico extremo pero real? → Reportar y analizar con cautela
+
+:::
+
+::: {.fragment}
+
+**2. Reportar su presencia**
+
+- Indicar cuántos se detectaron y en qué dirección
+- Si se excluyen, explicar el criterio
+
+:::
+
+::: {.fragment}
+
+**3. Usar estadísticos robustos**
+
+- Prefiera la **mediana** sobre la media
+- Use el **RIC** en lugar de la desviación estándar
+- El **diagrama de caja** los revela de inmediato
+
+:::
+
+::: {.fragment}
+
+::: {.callout-note}
+En salud, un dato atípico puede ser el **caso clínicamente más importante**: el paciente que esperó 65 minutos merece atención especial, no ser descartado del análisis.
+:::
+
+:::
+
+# TABLAS CRUZADAS {background-color="#0077b6"}
+
+## Tabla de Contingencia {style="font-size: 90%;"}
+
+Una **tabla de contingencia** muestra la distribución conjunta de **dos variables categóricas**.
+
+::: {.fragment}
+
+### Ejemplo
+
+60 pacientes de fisioterapia. Variables: **Sexo** × **Adherencia al tratamiento**
+
+</br>
+
+<div style="font-size:0.85em;">
+
+| | Alta | Media | Baja | **Total** |
+|:---|:---:|:---:|:---:|:---:|
+| **Hombres** | 12 | 10 | 8 | **30** |
+| **Mujeres** | 22 | 10 | 8 | **40** |
+| **Total** | **34** | **20** | **16** | **60** |
+
+</div>
+
+:::
+
+::: {.fragment}
+
+> Esta tabla muestra **frecuencias absolutas** (conteos). Para comparar grupos necesitamos **frecuencias relativas** (porcentajes por fila o columna).
+
+:::
+
+## Perfiles Fila {style="font-size: 90%;"}
+
+Los **perfiles fila** expresan los porcentajes **dentro de cada fila** (respecto al total de esa fila).
+
+$$\text{Perfil fila}_{ij} = \frac{n_{ij}}{n_{i \cdot}} \times 100\%$$
+
+::: {.fragment}
+
+<div style="font-size:0.85em;">
+
+| | Alta | Media | Baja | **Total** |
+|:---|:---:|:---:|:---:|:---:|
+| **Hombres** | 12/30 = **40.0%** | 10/30 = **33.3%** | 8/30 = **26.7%** | 100% |
+| **Mujeres** | 22/40 = **55.0%** | 10/40 = **25.0%** | 8/40 = **20.0%** | 100% |
+
+</div>
+
+:::
+
+::: {.fragment}
+
+**Interpretación:** La adherencia alta es más frecuente en mujeres (55%) que en hombres (40%). Los hombres presentan mayor proporción de adherencia baja (26.7% vs 20.0%).
+
+> Los perfiles fila responden: **¿Cómo se distribuye la adherencia dentro de cada sexo?**
+
+:::
+
+## Perfiles Columna {style="font-size: 85%;"}
+
+Los **perfiles columna** expresan los porcentajes **dentro de cada columna** (respecto al total de esa columna).
+
+$$\text{Perfil columna}_{ij} = \frac{n_{ij}}{n_{\cdot j}} \times 100\%$$
+
+::: {.fragment}
+
+<div style="font-size:0.85em;">
+
+| | Alta | Media | Baja |
+|:---|:---:|:---:|:---:|
+| **Hombres** | 12/34 = **35.3%** | 10/20 = **50.0%** | 8/16 = **50.0%** |
+| **Mujeres** | 22/34 = **64.7%** | 10/20 = **50.0%** | 8/16 = **50.0%** |
+| **Total** | **100%** | **100%** | **100%** |
+
+</div>
+
+:::
+
+::: {.fragment}
+
+**Interpretación:** Entre los pacientes con adherencia **alta**, el 64.7% son mujeres. En los niveles media y baja, la distribución es exactamente 50/50 entre sexos.
+
+> Los perfiles columna responden: **¿Cómo se compone cada nivel de adherencia según sexo?**
+
+:::
+
+## Visualización de la Tabla Cruzada
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 5.5
+#| fig-width: 11
+
+df_cross <- data.frame(
+  sexo = c(rep("Hombres", 30), rep("Mujeres", 40)),
+  adherencia = c(rep("Alta", 12), rep("Media", 10), rep("Baja", 8),
+                 rep("Alta", 22), rep("Media", 10), rep("Baja", 8))
+) |>
+  mutate(adherencia = factor(adherencia, levels = c("Baja", "Media", "Alta")))
+
+df_pct <- df_cross |>
+  count(sexo, adherencia) |>
+  group_by(sexo) |>
+  mutate(pct   = n / sum(n) * 100,
+         label = paste0(round(pct, 1), "%"))
+
+ggplot(df_pct, aes(x = sexo, y = pct, fill = adherencia)) +
+  geom_col(position = "fill", color = "white", linewidth = 0.5) +
+  geom_text(aes(label = label),
+            position = position_fill(vjust = 0.5),
+            size = 5, fontface = "bold", color = "white") +
+  scale_fill_manual(values = c("#EF9A9A", "#90CAF9", "#1565C0"),
+                    name = "Adherencia") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  theme_minimal(base_size = 14) +
+  labs(x = "", y = "Proporción",
+       title = "Perfiles fila: distribución de adherencia por sexo",
+       subtitle = "Diagrama de barras apiladas") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, color = "#555555"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor   = element_blank())
+```
+
+
+## Visualización de la Tabla Cruzada
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 5.5
+#| fig-width: 11
+
+ggplot(df_pct, aes(x = sexo, y = pct, fill = adherencia)) +
+  geom_col(position = position_dodge(width = 0.9), color = "white", linewidth = 0.5) +
+  geom_text(aes(label = label),
+            position = position_dodge(width = 0.9),
+            vjust = -0.5,  
+            size = 4.5, fontface = "bold", color = "black") +
+  scale_fill_manual(values = c("#EF9A9A", "#90CAF9", "#1565C0"),
+                    name = "Adherencia") +
+  scale_y_continuous(labels = scales::percent_format(scale = 1), 
+                     expand = expansion(mult = c(0, 0.1))) +
+  theme_minimal(base_size = 14) +
+  labs(x = "", y = "Proporción",
+       title = "Perfiles fila: distribución de adherencia por sexo",
+       subtitle = "Diagrama de barras agrupadas") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, color = "#555555"),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor   = element_blank())
+```
+
+
+## Código R: Tabla cruzada
+
+```{r}
+#| echo: true
+#| eval: true
+
+sexo <- c(rep("Hombres", 30), rep("Mujeres", 40))
+adherencia <- c(rep("Alta",12), rep("Media",10), rep("Baja",8),
+                rep("Alta",22), rep("Media",10), rep("Baja",8))
+
+# Tabla de frecuencias absolutas
+tabla <- table(sexo, adherencia)
+tabla
+
+# Perfiles fila (% dentro de cada sexo)
+round(prop.table(tabla, margin = 1) * 100, 1)
+```
+
+# VISUALIZACIÓN DE DATOS {background-color="#0077b6"}
+
+## ¿Qué gráfico elegir?
+
+<div style="font-size:0.8em; line-height:1.8;">
+
+| Variable(s) | Gráfico recomendado | En R (`ggplot2`) |
+|:------------|:-------------------:|:----------------:|
+| Una cualitativa | Barras / Circular | `geom_bar()` |
+| Dos cualitativas | Barras apiladas / agrupadas | `geom_bar()` |
+| Una cuantitativa | Histograma / Densidad | `geom_histogram()` |
+| Cuantitativa por grupos | Diagrama de caja | `geom_boxplot()` |
+| Dos cuantitativas | Dispersión | `geom_point()` |
+| Evolución temporal | Líneas | `geom_line()` |
+
+</div>
+
+::: {.fragment}
+
+::: {.callout-tip}
+**Regla de oro al leer artículos:** verifique que el gráfico es apropiado para el tipo de variable. Un gráfico de barras con el promedio y barras de error no muestra la distribución real, prefiera el diagrama de caja.
+:::
+
+:::
+
+## Gráfico de Barras: Variable cualitativa
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 5.5
+#| fig-width: 10
+
+dx_fisio <- data.frame(
+  diagnostico = c("Lumbalgia", "Fractura de cadera", "Lesión de hombro",
+                  "Gonartrosis", "Esguince de tobillo", "ACV"),
+  n = c(28, 19, 15, 12, 10, 8)
+) |>
+  mutate(diagnostico = reorder(diagnostico, n))
+
+ggplot(dx_fisio, aes(x = diagnostico, y = n)) +
+  geom_col(fill = "#1565C0", color = "white", alpha = 0.85, width = 0.65) +
+  geom_text(aes(label = n), hjust = -0.2, size = 4.8,
+            fontface = "bold", color = "#1565C0") +
+  coord_flip() +
+  scale_y_continuous(limits = c(0, 35)) +
+  theme_minimal(base_size = 13) +
+  labs(x = "", y = "Número de pacientes",
+       title = "Diagnósticos más frecuentes — servicio de fisioterapia",
+       subtitle = "n = 92 pacientes, primer semestre") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, color = "#555555"),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor   = element_blank())
+```
+
+## Histograma: Variable cuantitativa
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 5.5
+#| fig-width: 10
+
+set.seed(21)
+rom_data <- data.frame(rom = round(rnorm(80, mean = 105, sd = 18)))
+
+ggplot(rom_data, aes(x = rom)) +
+  geom_histogram(binwidth = 10, fill = "#1565C0", color = "white", alpha = 0.85) +
+  geom_vline(xintercept = mean(rom_data$rom),   color = "#C62828",
+             linetype = "dashed", linewidth = 1.3) +
+  geom_vline(xintercept = median(rom_data$rom), color = "#2E7D32",
+             linetype = "solid",  linewidth = 1.3) +
+  annotate("text", x = mean(rom_data$rom) + 8, y = 16,
+           label = paste0("Media = ", round(mean(rom_data$rom), 1), "°"),
+           color = "#C62828", size = 4.2, fontface = "bold") +
+  annotate("text", x = median(rom_data$rom) - 8, y = 13,
+           label = paste0("Mediana = ", median(rom_data$rom), "°"),
+           color = "#2E7D32", size = 4.2, fontface = "bold") +
+  theme_minimal(base_size = 13) +
+  labs(x = "Rango de movimiento de rodilla (°)",
+       y = "Frecuencia",
+       title = "ROM de rodilla al inicio de fisioterapia",
+       subtitle = "n = 80 pacientes post-artroplastia") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, color = "#555555"),
+        panel.grid.minor = element_blank())
+```
+
+## Diagrama de Caja: Cuanti vs Cuali
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 5.5
+#| fig-width: 10
+
+set.seed(15)
+df_rom_g <- bind_rows(
+  data.frame(rom = round(rnorm(40,  95, 15)), grupo = "Convencional"),
+  data.frame(rom = round(rnorm(40, 112, 12)), grupo = "Intensivo")
+)
+
+ggplot(df_rom_g, aes(x = grupo, y = rom, fill = grupo)) +
+  geom_boxplot(color = "#333333", alpha = 0.82,
+               outlier.size = 3, outlier.color = "#C62828",
+               width = 0.5) +
+  stat_summary(fun = mean, geom = "point",
+               shape = 18, size = 5, color = "#C62828") +
+  scale_fill_manual(values = c("#90CAF9", "#1565C0"), guide = "none") +
+  theme_minimal(base_size = 13) +
+  labs(x = "Tipo de tratamiento", y = "Rango de movimiento (°)",
+       title = "ROM post-tratamiento: comparación entre grupos",
+       subtitle = "Rombo rojo (◆) = media de cada grupo") +
+  theme(plot.title    = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5, color = "#555555"),
+        panel.grid.minor = element_blank())
+```
+
+::: {.fragment}
+El tratamiento intensivo tiene **mediana más alta** y **caja más pequeña** (menor variabilidad). Los resultados son mejores y más homogéneos.
+:::
+
+## Ejemplo de Tabla 1 en un Artículo {style="font-size: 82%;"}
+
+**Tabla 1. Características de los participantes al inicio del estudio (n = 80)**
+
+| Variable | Total (n=80) | Convencional (n=40) | Intensivo (n=40) |
+|:---------|:---:|:---:|:---:|
+| Edad (años), media ± DE | 52.3 ± 14.1 | 53.1 ± 13.8 | 51.5 ± 14.4 |
+| ROM rodilla (°), media ± DE | 104.8 ± 18.2 | 95.3 ± 15.0 | 112.1 ± 11.8 |
+| Dolor EVA, mediana (RIC) | 5 (3–7) | 6 (4–7) | 4 (2–6) |
+| Sexo femenino, n (%) | 50 (62.5%) | 25 (62.5%) | 25 (62.5%) |
+| Diagnóstico principal, n (%) | | | |
+| — Artrosis | 38 (47.5%) | 20 (50.0%) | 18 (45.0%) |
+| — Post-fractura | 26 (32.5%) | 13 (32.5%) | 13 (32.5%) |
+| — Ligamentoso | 16 (20.0%) | 7 (17.5%) | 9 (22.5%) |
+
+::: {.fragment}
+> El dolor (EVA) usa **mediana (RIC)** porque es una escala ordinal. Las variables continuas con distribución aproximadamente normal usan **media ± DE**.
+:::
+
+## Lea Críticamente un Artículo {style="font-size: 80%;"}
+
+::: {.fragment}
+
+**Al revisar la Tabla 1:**
+
+1. ¿Se justifica el uso de media o mediana para cada variable?
+2. ¿Los grupos son comparables al inicio (distribución similar)?
+3. ¿Hay variables con DE muy grande? ¿Se discute?
+4. ¿El tamaño de muestra es adecuado para el contexto?
+
+:::
+
+::: {.fragment}
+
+**Al revisar gráficos:**
+
+1. ¿Las escalas de los ejes son apropiadas? ¿El eje Y empieza en cero?
+2. ¿Se muestra la dispersión (cajas, barras de error) o solo el promedio?
+3. ¿El tipo de gráfico corresponde al tipo de variable?
+4. ¿Se identifica claramente el tamaño de la muestra?
+
+:::
+
+::: {.fragment}
+
+::: {.callout-note}
+Un gráfico de barras que muestra solo la media **oculta la distribución real** de los datos. Al ver este tipo de gráfico en un artículo, pregunte: ¿cuál era la variabilidad? ¿Había valores extremos?
+:::
+
+:::
+
+# ESTADÍSTICA EN ARTÍCULOS REALES {background-color="#0077b6"}
+
+## Tres artículos, tres contextos clínicos {style="font-size: 88%;"}
+
+Las medidas descriptivas que aprendimos aparecen en la **Tabla 1** de cualquier artículo publicado en ciencias de la salud. Analizamos tres estudios reales para ver qué estadísticos se usan, por qué y qué nos dicen clínicamente.
+
+::: columns
+
+::: {.column width="33%"}
+
+**Artículo 1**
+
+Actividad física en EPOC
+
+*Am J Respir Crit Care Med*, 2005
+
+Fisioterapia respiratoria
+
+:::
+
+::: {.column width="33%"}
+
+**Artículo 2**
+
+Prevención de caídas hospitalarias
+
+*JAMA*, 2010
+
+Enfermería hospitalaria
+
+:::
+
+::: {.column width="33%"}
+
+**Artículo 3**
+
+Riesgo cardiovascular en América Latina
+
+*Am J Med*, 2008
+
+Salud pública y preventiva
+
+:::
+
+:::
+
+## Artículo 1. EPOC y actividad física diaria {style="font-size: 84%;"}
+
+
+**Diseño:** Estudio observacional transversal.
+
+**Objetivo:** Caracterizar los patrones de actividad física en pacientes con EPOC comparados con controles sanos, usando sensores de movimiento durante dos semanas.
+
+**Participantes:**
+
+- 50 pacientes con EPOC moderado-severo
+- 25 controles sanos apareados por edad y sexo
+
+**Pregunta clave:** ¿Cuánto se mueven realmente los pacientes con EPOC fuera del hospital?
+
+::: {.callout-note}
+
+**Referencia**
+
+Pitta F, Troosters T, Spruit MA, Probst VS, Decramer M, Gosselink R. Characteristics of physical activities in daily life in chronic obstructive pulmonary disease. *Am J Respir Crit Care Med*. 2005;171(9):972–977.
+
+:::
+
+## Tabla 1. Línea de base {style="font-size: 78%;"}
+
+**Características demográficas y funcionales al inicio del estudio**
+
+| Variable | EPOC (n = 50) | Controles (n = 25) |
+|:---------|:---:|:---:|
+| Edad (años), **media ± DE** | 67 ± 7 | 64 ± 7 |
+| Sexo masculino, **n (%)** | 39 (78%) | 21 (84%) |
+| IMC (kg/m²), **media ± DE** | 23,8 ± 4,5 | 25,7 ± 3,4 |
+| FEV₁ (% predicho), **media ± DE** | 42 ± 13 | 106 ± 12 |
+| Prueba de marcha 6 min (m), **media ± DE** | 449 ± 82 | 548 ± 64 |
+| Disnea mMRC, **mediana (RIC)** | 2 (1–3) | 0 (0–0) |
+| Tiempo de caminata diaria (min/día), **mediana (RIC)** | 26 (11–48) | 72 (50–107) |
+
+: {tbl-colwidths="[48,26,26]"}
+
+::: {.fragment}
+
+::: {.callout-tip}
+**¿Por qué dos estadísticos en la misma tabla?** FEV₁, IMC, 6MWT y edad son continuas simétricas → **media ± DE**. La disnea (escala ordinal mMRC 0–4) y el tiempo de caminata (distribución fuertemente asimétrica) → **mediana (RIC)**.
+:::
+
+:::
+
+<small>*Adaptado de: Pitta et al. Am J Respir Crit Care Med. 2005;171:972–977.*</small>
+
+## Discusión del Artículo 1 {style="font-size: 85%;"}
+
+**Hallazgo principal**
+
+Los pacientes con EPOC caminaron solo **26 min/día** frente a **72 min/día** en controles (*p* < 0,001). Una diferencia de casi 3 veces que no se captura en el laboratorio.
+
+
+**Implicación para fisioterapia**
+
+El 6MWT en laboratorio (449 m EPOC vs. 548 m controles) **subestima** la inactividad real: el paciente puede completar el test pero permanecer casi sedentario en su vida cotidiana.
+
+::: {.fragment}
+
+**Lectura crítica de la tabla:**
+
+- La DE de mMRC **no se reporta**: escala ordinal, no tiene aritmética válida.
+- El RIC del tiempo de caminata (11–48) revela que los más activos del grupo EPOC caminan **4 veces más** que los menos activos: heterogeneidad clínica importante.
+
+
+:::
+
+
+## Artículo 2. Prevención de caídas en hospitalización {style="font-size: 84%;"}
+
+**Diseño:** Ensayo clínico controlado aleatorizado por conglomerados.
+
+**Objetivo:** Evaluar si el programa FALL TIPS (planes de prevención individualizados impresos al lado de la cama del paciente) reduce la tasa de caídas durante la hospitalización.
+
+**Participantes:**
+
+- 10.051 pacientes en 4 hospitales de Boston
+- 8 unidades asignadas al azar (4 intervención, 4 control)
+
+**Pregunta clave:** ¿Una intervención de enfermería basada en información personalizada reduce las caídas?
+
+
+::: {.callout-note}
+
+**Referencia**
+
+Dykes PC, Carroll DL, Hurley A, et al. Fall prevention in acute care hospitals: a randomized trial. *JAMA*. 2010;304(17):1912–1918.
+
+:::
+
+
+## Tabla 2. Comparación entre grupos (Artículo 2) {style="font-size: 79%;"}
+
+| Variable | Intervención (n = 4.813) | Control (n = 5.238) |
+|:---------|:---:|:---:|
+| Edad (años), **media ± DE** | 62,6 ± 18,0 | 61,2 ± 18,4 |
+| Sexo femenino, **n (%)** | 2.127 (44,2%) | 2.322 (44,3%) |
+| Escala de Morse, **media ± DE** | 40,3 ± 22,5 | 37,9 ± 22,7 |
+| Estancia hospitalaria (días), **mediana (RIC)** | 3 (2–6) | 3 (2–6) |
+| **Caídas / 1.000 días-paciente** | **3,15** | **4,18** |
+| Reducción ajustada de caídas | **24,6%** (*p* = 0,03) | — |
+
+: {tbl-colwidths="[46,27,27]"}
+
+
+::: {.callout-warning}
+La estancia usa **mediana (RIC)**, no media ± DE: la mayoría de los pacientes tiene estancias cortas, pero algunos permanecen semanas → cola derecha pronunciada. Reportar la media daría una imagen distorsionada del paciente típico.
+:::
+
+<small>*Adaptado de: Dykes et al. JAMA. 2010;304:1912–1918.*</small>
+
+## Discusión del Artículo 2 {style="font-size: 80%;"}
+
+**Comparabilidad línea de base**
+
+Ambos grupos son similares en edad, sexo y escala de Morse al inicio: la aleatorización funcionó. **Verificar esta comparabilidad es el primer paso** al leer cualquier ensayo clínico.
+
+::: {.fragment}
+
+**La tasa ajusta por tiempo de observación**
+
+Caídas por 1.000 días-paciente es la métrica correcta porque los pacientes tienen tiempos de estancia muy diferentes. Reportar solo el recuento absoluto sería engañoso.
+
+:::
+
+
+
+::: {.fragment}
+
+**Lectura crítica de la tabla:**
+
+- DE de Morse ≈ 22 sobre media ≈ 40: CV = **55%** → enorme variabilidad en el riesgo de caída entre pacientes hospitalizados.
+- La **diferencia de 1,03 caídas/1.000 días-paciente** parece pequeña, pero en 10.000 hospitalizaciones equivale a ≈ **10 caídas evitadas por día**.
+- La Escala de Morse (0–125) se trata aquí como cuantitativa continua → media ± DE; cuando la escala es muy amplia y se usa en análisis de regresión, esta práctica es habitual.
+
+:::
+
+
+
+## Artículo 3. Riesgo cardiovascular en América Latina (CARMELA) {style="font-size: 84%;"}
+
+**Diseño:** Estudio transversal de base poblacional con muestreo probabilístico en cada ciudad.
+
+**Objetivo:** Estimar la prevalencia de factores de riesgo cardiovascular en adultos de 7 ciudades de América Latina.
+
+**Participantes:** 11.550 adultos de 25 a 64 años de Barquisimeto, **Bogotá**, Buenos Aires, Lima, Ciudad de México, Quito y Santiago.
+
+**Relevancia local:** Es uno de los estudios comparativos más importantes con datos propios de Colombia sobre riesgo cardiovascular.
+
+
+::: {.callout-note}
+
+**Referencia**
+
+Schargrodsky H, Hernández-Hernández R, Champagne BM, et al. CARMELA: assessment of cardiovascular risk in seven Latin American cities. *Am J Med*. 2008;121(1):58–65.
+
+:::
+
+## Prevalencia de factores de riesgo (CARMELA)
+
+</br>
+
+```{r}
+#| echo: false
+#| fig-align: center
+#| fig-height: 5.0
+#| fig-width: 12
+
+carmela_raw <- data.frame(
+  ciudad       = c("Barquisimeto", "Bogotá", "Buenos Aires", "Lima",
+                   "Cd. de México", "Quito", "Santiago"),
+  Hipertensión = c(25.0, 14.0, 28.3, 11.0, 17.5, 16.4, 27.8),
+  Diabetes     = c( 6.3,  7.4,  6.8,  7.0,  9.7,  7.2,  7.5),
+  Obesidad     = c(28.7, 17.5, 23.2, 17.1, 30.2, 16.2, 25.2)
+)
+
+city_order <- carmela_raw$ciudad[order(carmela_raw$Hipertensión, decreasing = TRUE)]
+
+df_long <- carmela_raw |>
+  pivot_longer(cols = -ciudad, names_to = "factor", values_to = "prev") |>
+  mutate(
+    resaltar = if_else(ciudad == "Bogotá", "Bogotá", "Otra"),
+    ciudad   = factor(ciudad, levels = city_order),
+    factor   = factor(factor, levels = c("Hipertensión", "Diabetes", "Obesidad"))
+  )
+
+ggplot(df_long, aes(x = ciudad, y = prev, fill = resaltar)) +
+  geom_col(width = 0.72, alpha = 0.88, color = NA) +
+  geom_text(aes(label = paste0(prev, "%"), color = resaltar),
+            vjust = -0.4, size = 3.2, fontface = "bold") +
+  scale_fill_manual(
+    values = c("Bogotá" = "#C62828", "Otra" = "#90CAF9"),
+    guide  = "none"
+  ) +
+  scale_color_manual(
+    values = c("Bogotá" = "#C62828", "Otra" = "#333333"),
+    guide  = "none"
+  ) +
+  facet_wrap(~ factor, nrow = 1) +
+  scale_y_continuous(limits = c(0, 37),
+                     labels = function(x) paste0(x, "%")) +
+  theme_minimal(base_size = 11) +
+  labs(x = "", y = "Prevalencia (%)",
+       title    = "Prevalencia de factores de riesgo cardiovascular — CARMELA (2008)",
+       subtitle = "Bogotá resaltada en rojo  |  n = 11.550 adultos de 25–64 años") +
+  theme(
+    plot.title       = element_text(hjust = 0.5, face = "bold", size = 11),
+    plot.subtitle    = element_text(hjust = 0.5, color = "#555555", size = 9),
+    axis.text.x      = element_text(angle = 38, hjust = 1, size = 9),
+    panel.grid.minor = element_blank(),
+    strip.text       = element_text(face = "bold", size = 10)
+  )
+```
+
+## Tabla 3. Prevalencia de factores de riesgo cardiovascular (%) por ciudad {style="font-size: 77%;"}
+
+</br>
+
+
+| Ciudad | n | HTA | Diabetes | Dislipidemia | Obesidad |
+|:-------|:---:|:---:|:---:|:---:|:---:|
+| Barquisimeto | 1.849 | 25,0 | 6,3 | 47,0 | 28,7 |
+| **Bogotá** | **1.553** | **14,0** | **7,4** | **51,3** | **17,5** |
+| Buenos Aires | 1.428 | 28,3 | 6,8 | 53,9 | 23,2 |
+| Lima | 1.668 | 11,0 | 7,0 | 47,8 | 17,1 |
+| Cd. de México | 1.728 | 17,5 | 9,7 | 53,4 | 30,2 |
+| Quito | 1.710 | 16,4 | 7,2 | 37,9 | 16,2 |
+| Santiago | 1.614 | 27,8 | 7,5 | 51,7 | 25,2 |
+
+: {tbl-colwidths="[26,10,11,12,15,12]"}
+
+<small>*Adaptado de: Schargrodsky et al. Am J Med. 2008;121:58–65.*</small>
+
+---
+
+## Discusión. {style="font-size: 90%;"}
+
+**¿Por qué solo n (%)?**
+
+Todas las variables son dicotómicas (tiene/no tiene el factor de riesgo). El único estadístico válido es la **proporción** reportada como porcentaje.
+
+**Bogotá destaca por:**
+
+- HTA más baja de las ciudades no andinas (14%) → **efecto protector de la altitud** (2.640 m s.n.m.) sobre la presión arterial en reposo.
+
+- Dislipidemia alta (51,3%), esta alteración del metabolismo de las grasas que afecta los niveles de colesterol y triglicéridos en la sangre es el principal factor de riesgo en la capital colombiana.
+
+
+## Síntesis {style="font-size: 80%;"}
+
+<div style="font-size:0.75em; line-height:1.9;">
+
+| Situación en el artículo | Estadístico | Justificación |
+|:-------------------------|:-----------:|:-------------|
+| Continua simétrica (edad, FEV₁, 6MWT) | **Media ± DE** | Usa toda la información; DE tiene unidades del dato original |
+| Continua asimétrica (estancia, caminata diaria) | **Mediana (RIC)** | Resistente a la cola larga; RIC describe el 50% central |
+| Ordinal (disnea mMRC, dolor EVA) | **Mediana (RIC)** | La aritmética de escalas ordinales carece de sentido clínico |
+| Dicotómica (sexo, HTA, diabetes) | **n (%)** | Solo puede ser proporción; la media no aplica |
+| Tasa de eventos con tiempo variable | **Tasa / 1.000 días** | Ajusta por el tiempo de observación diferente entre sujetos |
+
+: {tbl-colwidths="[45, 15, 40]"}
+
+</div>
+
+::: {.fragment}
+
+::: {.callout-tip}
+**Regla para la práctica profesional:** Antes de elegir la estadística, responda dos preguntas: ¿qué tipo de variable es? y ¿cómo es su distribución? Las respuestas determinan si debe reportar media ± DE, mediana (RIC) o n (%).
+:::
+
+:::
+
+# GRACIAS! {background-color="#ddf3ff"}
+
+# Citación y derechos de autor
+
+Este material ha sido creado por [Giovany Babativa-Márquez](https://github.com/jgbabativam) y es de libre distribución bajo la licencia [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+Cualquier copia parcial o total de este material, debe citar la fuente como:
+
+> Babativa-Márquez, J.G. *Diapositivas del curso de Estadística Fundamental para Ciencias de la Salud*. URL: https://jgbabativam.github.io/EstadFundSalud/
