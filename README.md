@@ -86,8 +86,7 @@ El curso incorpora el uso de tecnologías de la información y la comunicación 
 
 Video guía de instalación:
 
--   Instalación de R\
-    https://youtu.be/TKplIIwwdEk
+-   [Instalación de R](https://youtu.be/TKplIIwwdEk)
 
 ---
 
