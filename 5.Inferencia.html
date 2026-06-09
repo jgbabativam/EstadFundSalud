@@ -1872,13 +1872,36 @@ attr(,&quot;conf.level&quot;)
 <p>Compara medias de dos grupos independientes.</p>
 <p><span class="math display">\[H_0: \mu_1 = \mu_2 \quad vs \quad H_a: \mu_1 \neq \mu_2\]</span></p>
 <p><strong>Con varianzas iguales</strong> (<span class="math inline">\(s_p^2\)</span> = varianza pooled):</p>
-<p><span class="math display">\[\boxed{t = \frac{\bar{x}_1 - \bar{x}_2}{s_p\sqrt{1/n_1+1/n_2}}}\]</span></p>
+<p><span class="math display">\[\boxed{t = \frac{\bar{x}_1 - \bar{x}_2}{s_p\sqrt{1/n_1+1/n_2}} \sim t_{(n_1+n_2-2)} }\]</span></p>
 <p><span class="math display">\[s_p^2 = \frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}\]</span></p>
-<p><span class="math inline">\(gl = n_1 + n_2 - 2\)</span></p>
 <p><strong>Con varianzas desiguales</strong> (Welch):</p>
-<p><span class="math display">\[t_W = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{s_1^2/n_1+s_2^2/n_2}}\]</span></p>
+<p><span class="math display">\[t_W = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{s_1^2/n_1+s_2^2/n_2}} \sim t_{(v)} \]</span></p>
 </section>
-<section id="prueba-t-para-dos-muestras-independientes-1" class="slide level2" style="font-size: 85%;">
+<section id="prueba-t-para-dos-muestras-independientes-1" class="slide level2" style="font-size: 75%;">
+<h2>Prueba t para dos muestras independientes</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>Cuando las varianzas no se pueden suponer iguales, se usa la aproximación de Satterthwaite (1946) o Welch (1947) para aproximar los grados de libertad</p>
+</div>
+</div>
+</div>
+<ul>
+<li>Satterthwaite</li>
+</ul>
+<p><span class="math display">\[v= \frac{\left(s_1^2/n_1 + s_2^2/n_2\right)^ 2}{ \frac{(s_1^2/n_1)^2}{n_1-1}  + \frac{( s_2^2/n_2)^2}{n_2-1}}\]</span></p>
+<ul>
+<li>Welch</li>
+</ul>
+<p><span class="math display">\[v= \frac{\left(s_1^2/n_1 + s_2^2/n_2\right)^ 2}{ \frac{(s_1^2/n_1)^2}{n_1+1}  + \frac{( s_2^2/n_2)^2}{n_2+1}}-2\]</span></p>
+</section>
+<section id="prueba-t-para-dos-muestras-independientes-2" class="slide level2" style="font-size: 85%;">
 <h2>Prueba t para dos muestras independientes</h2>
 <p><strong>Ejemplo:</strong> Tiempo de hospitalización (días) en dos grupos de pacientes con neumonía: Grupo A (tratamiento estándar, <span class="math inline">\(n_1=12\)</span>): <span class="math inline">\(\bar{x}_1=6.79\)</span>, <span class="math inline">\(s_1=0.79\)</span>; Grupo B (protocolo nuevo, <span class="math inline">\(n_2=12\)</span>): <span class="math inline">\(\bar{x}_2=5.36\)</span>, <span class="math inline">\(s_2=0.48\)</span>. ¿Existe evidencia para afirmar que los tiempos de hospitalización son diferentes entre los dos grupos?</p>
 <p><span class="math inline">\(s_p^2 = \frac{11 \times 0.79^2 + 11 \times 0.48^2}{22} = \frac{24.75+21.56}{22} = 0.43\)</span></p>

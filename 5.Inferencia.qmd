@@ -1000,17 +1000,29 @@ $$H_0: \mu_1 = \mu_2 \quad vs \quad H_a: \mu_1 \neq \mu_2$$
 
 **Con varianzas iguales** ($s_p^2$ = varianza pooled):
 
-$$\boxed{t = \frac{\bar{x}_1 - \bar{x}_2}{s_p\sqrt{1/n_1+1/n_2}}}$$
+$$\boxed{t = \frac{\bar{x}_1 - \bar{x}_2}{s_p\sqrt{1/n_1+1/n_2}} \sim t_{(n_1+n_2-2)} }$$
 
 $$s_p^2 = \frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}$$
 
-$gl = n_1 + n_2 - 2$
-
 **Con varianzas desiguales** (Welch):
 
-$$t_W = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{s_1^2/n_1+s_2^2/n_2}}$$
+$$t_W = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{s_1^2/n_1+s_2^2/n_2}} \sim t_{(v)} $$
 
 ---
+
+## Prueba t para dos muestras independientes {style="font-size: 75%;"}
+
+::: {.callout-note}
+Cuando las varianzas no se pueden suponer iguales, se usa la aproximación de Satterthwaite (1946) o Welch (1947) para aproximar los grados de libertad
+:::
+
+* Satterthwaite
+
+$$v= \frac{\left(s_1^2/n_1 + s_2^2/n_2\right)^ 2}{ \frac{(s_1^2/n_1)^2}{n_1-1}  + \frac{( s_2^2/n_2)^2}{n_2-1}}$$
+
+* Welch
+
+$$v= \frac{\left(s_1^2/n_1 + s_2^2/n_2\right)^ 2}{ \frac{(s_1^2/n_1)^2}{n_1+1}  + \frac{( s_2^2/n_2)^2}{n_2+1}}-2$$
 
 ## Prueba t para dos muestras independientes {style="font-size: 85%;"}
 
