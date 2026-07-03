@@ -1,0 +1,298 @@
+---
+title: "Estadística Fundamental para Ciencias de la Salud"
+subtitle: "Intervalos de Confianza"
+author:
+    name: Giovany Babativa-Márquez, PhD
+    email: jgbabativam@unal.edu.co
+format:
+  gbabativa-revealjs:
+    logo: "images/UNAL.png"
+incremental: false
+embed-resources: true
+highlight-style: dracula
+execute:
+  echo: false
+  eval: true
+filters:
+  - webr
+revealjs-plugins:
+  - drop
+---
+
+```{r}
+library(pacman)
+p_load(here, ggplot2, dplyr, tidyr)
+```
+
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+
+# INTERVALOS DE CONFIANZA {background-color="#0077b6"}
+
+## De la estimación puntual a la estimación por intervalo {style="font-size: 88%;"}
+
+Ya vimos que la inferencia estadística tiene dos grandes problemas: **estimación** y **contraste de hipótesis**. Hoy profundizamos en la estimación por intervalo.
+
+::: {.fragment}
+- **Estimación puntual:** un solo valor ($\bar{x}$, $\hat{p}$, $s^2$) que aproxima al parámetro
+- **Estimación por intervalo:** un rango de valores plausibles para el parámetro, con un **nivel de confianza** asociado
+:::
+
+::: {.fragment}
+::: {.callout-tip}
+**En salud:** un IC comunica no solo el efecto estimado, sino también la **incertidumbre** de la estimación, algo esencial para tomar decisiones clínicas.
+:::
+:::
+
+## ¿Qué es un intervalo de confianza? {style="font-size: 85%;"}
+
+Un IC del $(1-\alpha)$% es un rango $(L, U)$ construido a partir de los datos, tal que si repitiéramos el muestreo muchas veces, el $(1-\alpha)$% de esos intervalos contendría al verdadero parámetro.
+
+Estructura general:
+
+$$\boxed{\text{Estimador} \;\pm\; (\text{valor crítico}) \times (\text{Error estándar})}$$
+
+::: {.fragment}
+- **Estimador:** $\hat{p}$, $\bar{x}$, $\bar{x}_1-\bar{x}_2$, $\bar{d}$, $s^2$, $s_1^2/s_2^2$
+- **Valor crítico:** depende de la distribución del estadístico ($Z$, $t$, $\chi^2$, $F$) y del nivel de confianza
+- **Error estándar:** mide la variabilidad del estimador
+:::
+
+## Nivel de confianza y valor crítico {style="font-size: 85%;"}
+
+| Confianza | $\alpha$ | $z_{\alpha/2}$ |
+|:---:|:---:|:---:|
+| 90% | 0.10 | 1.645 |
+| 95% | 0.05 | 1.960 |
+| 99% | 0.01 | 2.576 |
+
+::: {.fragment}
+Cuando el estadístico pivote es $t$, $\chi^2$ o $F$, el valor crítico depende además de los **grados de libertad**.
+:::
+
+::: {.fragment}
+::: {.callout-note}
+A **mayor confianza**, mayor amplitud del intervalo (menos precisión); a **mayor tamaño de muestra**, menor amplitud (mayor precisión).
+:::
+:::
+
+## ¿Qué distribución usar? {style="font-size: 78%;"}
+
+<div style="font-size:0.85em;">
+
+| Parámetro | Estadístico pivote | Distribución |
+|---|:---:|:---:|
+| 1 proporción | $Z$ | Normal |
+| Diferencia de 2 proporciones | $Z$ | Normal |
+| 1 media ($\sigma$ conocida o $n$ grande) | $Z$ | Normal |
+| 1 media ($\sigma$ desconocida) | $t$ | $t(n-1)$ |
+| Diferencia de 2 medias independientes | $t$ | $t$ |
+| Diferencia de medias pareadas | $t$ | $t(n-1)$ |
+| 1 varianza | $\chi^2$ | $\chi^2(n-1)$ |
+| Razón de varianzas | $F$ | $F(n_1-1, n_2-1)$ |
+
+</div>
+
+# FÓRMULAS DE INTERVALOS DE CONFIANZA {background-color="#0077b6"}
+
+## IC para una proporción {style="font-size: 85%;"}
+
+$$\boxed{\hat{p} \;\pm\; z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}}$$
+
+**Condición:** $n\hat{p} \geq 5$ y $n(1-\hat{p}) \geq 5$.
+
+::: {.fragment}
+**Ejemplo en salud:** proporción de pacientes con adherencia a un tratamiento, prevalencia de una enfermedad, proporción de eventos adversos.
+:::
+
+## IC para diferencia de dos proporciones {style="font-size: 85%;"}
+
+$$\boxed{(\hat{p}_1 - \hat{p}_2) \;\pm\; z_{\alpha/2}\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1}+\frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}}$$
+
+::: {.callout-note}
+A diferencia de la prueba de hipótesis (que usa $\hat{p}$ combinada), el IC usa las proporciones **por separado**, pues no asume $p_1=p_2$.
+:::
+
+## IC para una media {style="font-size: 82%;"}
+
+::: columns
+
+::: {.column width="50%"}
+**$\sigma$ conocida** (o $n$ grande):
+
+$$\boxed{\bar{x} \;\pm\; z_{\alpha/2}\frac{\sigma}{\sqrt{n}}}$$
+:::
+
+::: {.column width="50%"}
+**$\sigma$ desconocida** (caso habitual):
+
+$$\boxed{\bar{x} \;\pm\; t_{\alpha/2,\,n-1}\frac{s}{\sqrt{n}}}$$
+:::
+
+:::
+
+::: {.fragment}
+**Ejemplo en salud:** frecuencia cardiaca media, nivel medio de HbA1c, talla o peso promedio.
+:::
+
+## IC para diferencia de dos medias independientes {style="font-size: 80%;"}
+
+**Varianzas iguales** (con varianza combinada $s_p^2$):
+
+$$\boxed{(\bar{x}_1-\bar{x}_2) \;\pm\; t_{\alpha/2,\,n_1+n_2-2}\; s_p\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}$$
+
+$$s_p^2 = \frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2}$$
+
+::: {.fragment}
+**Varianzas desiguales** (Welch):
+
+$$(\bar{x}_1-\bar{x}_2) \;\pm\; t_{\alpha/2,\,gl}\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$$
+:::
+
+## IC para medias pareadas {style="font-size: 85%;"}
+
+Con $D_i = X_{1i}-X_{2i}$ y $\bar{d}$, $s_d$ la media y desviación de las diferencias:
+
+$$\boxed{\bar{d} \;\pm\; t_{\alpha/2,\,n-1}\frac{s_d}{\sqrt{n}}}$$
+
+::: {.fragment}
+**Ejemplo en salud:** cambio en presión arterial antes/después de una intervención, diferencia en rango de movimiento (ROM) pre-post fisioterapia.
+:::
+
+## IC para una varianza {style="font-size: 85%;"}
+
+$$\boxed{\left(\frac{(n-1)s^2}{\chi^2_{\alpha/2,\,n-1}},\;\; \frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\,n-1}}\right)}$$
+
+::: {.callout-note}
+Los cuantiles de $\chi^2$ **no son simétricos**: el límite inferior usa el cuantil superior ($\chi^2_{\alpha/2}$) y el límite superior usa el cuantil inferior ($\chi^2_{1-\alpha/2}$).
+:::
+
+## IC para razón de varianzas {style="font-size: 82%;"}
+
+$$\boxed{\left(\frac{s_1^2}{s_2^2}\cdot\frac{1}{F_{\alpha/2,\,n_1-1,\,n_2-1}},\;\; \frac{s_1^2}{s_2^2}\cdot F_{\alpha/2,\,n_2-1,\,n_1-1}\right)}$$
+
+::: {.fragment}
+Si el intervalo **no contiene el 1**, hay evidencia de que las varianzas poblacionales son distintas.
+:::
+
+## Infografía: Intervalos de Confianza
+
+![](images/IC_wide.png){fig-align="center" width=95%}
+
+## Funciones en R para cada IC {style="font-size: 78%;"}
+
+<div style="font-size:0.85em;">
+
+| IC para | Función en R |
+|---|---|
+| 1 proporción | `prop.test(x, n)` |
+| 2 proporciones | `prop.test(x=c(x1,x2), n=c(n1,n2))` |
+| 1 media | `t.test(x)` |
+| 2 medias independientes | `t.test(x1, x2, var.equal=TRUE/FALSE)` |
+| Medias pareadas | `t.test(x1, x2, paired=TRUE)` |
+| 1 varianza | cálculo directo (no hay función base) |
+| Razón de varianzas | `var.test(x1, x2)` |
+
+</div>
+
+# ¿QUÉ FÓRMULA USAR? {background-color="#0077b6"}
+
+## Dinámica del ejercicio {style="font-size: 85%;"}
+
+Para cada caso clínico:
+
+1. Identifique el **parámetro** de interés (proporción, media, varianza)
+2. Determine si son **1 o 2 grupos**, y si son **independientes o pareados**
+3. Señale **qué fórmula** (y qué distribución) usaría
+
+::: {.callout-warning}
+**Todavía no calcule el intervalo.** Primero discutimos en clase cuál es la fórmula correcta; luego resolvemos algunos casos juntos.
+:::
+
+## Ejercicios (1/2) {style="font-size: 80%;"}
+
+1. En una cohorte de 200 pacientes con VIH en terapia antirretroviral, 170 muestran adherencia adecuada. Estime la proporción de adherencia. 
+2. Se compara la tasa de reingreso hospitalario a 30 días entre dos protocolos de alta: A (18 de 120) y B (9 de 110). 
+3. En 25 pacientes se midió la frecuencia cardiaca en reposo: $\bar{x}=72$ lpm, $s=8$ lpm. 
+4. Un termómetro clínico tiene $\sigma=0.2°C$ (conocida de fábrica). En 10 mediciones se obtuvo $\bar{x}=37.1°C$. 
+5. Tiempo de recuperación (días) tras cirugía laparoscópica ($n_1=20$, $\bar{x}_1=4.2$, $s_1=1.1$) vs. cirugía abierta ($n_2=18$, $\bar{x}_2=6.5$, $s_2=1.4$). 
+6. Se midió la presión arterial sistólica antes y después de un programa de ejercicio en 15 pacientes hipertensos. 
+
+
+## Ejercicios (2/2) {style="font-size: 80%;"}
+
+7. Se evalúa la variabilidad de un glucómetro nuevo: $n=12$, $s^2=6.4$ (mg/dL)². 
+8. Se compara la variabilidad del tiempo de coagulación entre dos lotes de reactivo: lote 1 ($n_1=10$, $s_1^2=3.2$) y lote 2 ($n_2=12$, $s_2^2=1.8$). 
+9. Se compara la tasa de eventos adversos post-vacunación entre el grupo A (25 de 300) y el grupo B (40 de 280). 
+10. En un tamizaje poblacional de VIH se encontraron 34 positivos en 850 personas evaluadas. |
+11. Nivel de LDL colesterol (mg/dL) comparando un grupo con dieta ($n_1=22$, $\bar{x}_1=132$, $s_1=18$) y un grupo con fármaco ($n_2=24$, $\bar{x}_2=110$, $s_2=15$). 
+12. Dolor EVA (0–10) antes y después de 6 sesiones de fisioterapia en 18 pacientes con lumbalgia. 
+
+## Respuestas: identificación {style="font-size: 90%;"}
+
+::: {.fragment}
+
+<div style="font-size:0.78em;">
+
+| Caso | Tipo de IC |
+|:---:|---|
+| 1 | 1 proporción |
+| 2 | Diferencia de 2 proporciones |
+| 3 | 1 media ($t$, $\sigma$ desconocida) |
+| 4 | 1 media ($Z$, $\sigma$ conocida) |
+| 5 | Diferencia de 2 medias independientes |
+| 6 | Diferencia de medias pareadas |
+| 7 | 1 varianza |
+| 8 | Razón de varianzas |
+| 9 | Diferencia de 2 proporciones |
+| 10 | 1 proporción |
+| 11 | Diferencia de 2 medias independientes |
+| 12 | Diferencia de medias pareadas |
+
+</div>
+
+:::
+
+# RESOLVAMOS UN CASO {background-color="#0077b6"}
+
+## Caso 3 resuelto: frecuencia cardiaca {style="font-size: 85%;"}
+
+**Datos:** $n=25$, $\bar{x}=72$ lpm, $s=8$ lpm. IC 95% para la FC media ($\sigma$ desconocida $\rightarrow$ distribución $t$).
+
+$$\bar{x} \pm t_{0.025,\,24}\frac{s}{\sqrt{n}} = 72 \pm 2.064 \times \frac{8}{\sqrt{25}}$$
+
+$$= 72 \pm 3.30 = (68.70,\; 75.30) \text{ lpm}$$
+
+::: {.fragment}
+```{r}
+#| echo: true
+set.seed(2024)
+fc <- rnorm(25, mean = 72, sd = 8)
+t.test(fc, conf.level = 0.95)$conf.int
+```
+:::
+
+::: {.fragment}
+::: {.callout-tip}
+**Interpretación:** con 95% de confianza, la frecuencia cardiaca media de la población de pacientes se encuentra entre 68.7 y 75.3 lpm.
+:::
+:::
+
+## Para practicar en casa {style="font-size: 85%;"}
+
+Los 12 casos anteriores (y muchos más) están completamente resueltos —con cálculo manual, código en R e interpretación clínica— en el taller de la clase:
+
+::: {.callout-note}
+**`IC.pdf`** (para resolver), disponibles en la carpeta `Talleres/` del curso.
+:::
+
+60 ejercicios organizados en las 7 categorías vistas hoy: 1 proporción, 2 proporciones, 1 media, 2 medias independientes, medias pareadas, 1 varianza y razón de varianzas.
+
+# GRACIAS! {background-color="#ddf3ff"}
+
+# Citación y derechos de autor
+
+Este material ha sido creado por [Giovany Babativa-Márquez](https://github.com/jgbabativam) y es de libre distribución bajo la licencia [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+
+Cualquier copia parcial o total de este material, debe citar la fuente como:
+
+> Babativa-Márquez, J.G. *Diapositivas del curso de Estadística Fundamental para Ciencias de la Salud*. URL: https://jgbabativam.github.io/EstadFundSalud/
