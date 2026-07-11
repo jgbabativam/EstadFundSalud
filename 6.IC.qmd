@@ -174,9 +174,6 @@ $$\boxed{\left(\frac{s_1^2}{s_2^2}\cdot\frac{1}{F_{\alpha/2,\,n_1-1,\,n_2-1}},\;
 Si el intervalo **no contiene el 1**, hay evidencia de que las varianzas poblacionales son distintas.
 :::
 
-## Infografía: Intervalos de Confianza
-
-![](images/IC_wide.png){fig-align="center" width=95%}
 
 ## Funciones en R para cada IC {style="font-size: 78%;"}
 
